@@ -12,14 +12,14 @@
 		<!-- /.login-logo -->
 		<div class="card card-outline card-primary">
 			<div class="card-header text-center">
-				<a href="../../index2.html" class="h2"><b>TRƯỜNG CHÍNH TRỊ</b></a>
+				<a href="#" class="h2"><b>TRƯỜNG CHÍNH TRỊ</b></a>
 			</div>
 			<div class="card-body">
 				<p class="login-box-msg">Vui lòng đăng nhập để sử dụng</p>
 
 				<form action="javascript:void(0);">
 					<div class="input-group mb-3">
-						<input type="text" class="form-control" placeholder="Tên đăng nhập">
+						<input type="text" class="form-control" placeholder="Tên đăng nhập" id="ten-dang-nhap">
 						<div class="input-group-append">
 							<div class="input-group-text">
 								<span class="fas fa-user"></span>
@@ -27,7 +27,7 @@
 						</div>
 					</div>
 					<div class="input-group mb-3">
-						<input type="password" class="form-control" placeholder="Mật khẩu">
+						<input type="password" class="form-control" placeholder="Mật khẩu" id="mat-khau">
 						<div class="input-group-append">
 							<div class="input-group-text">
 								<span class="fas fa-lock"></span>
@@ -77,22 +77,26 @@
 	@include('layouts/script')
 	<script type="text/javascript">
 		$('.btn-dang-nhap').click(function(){
+			var tenDangNhap = $('#ten-dang-nhap').val();
+			var matKhau = $('#mat-khau').val();
 			$.ajax({
-				url: '{{url("check-login")}}',
+				url: '{{route("check-login")}}',
 				data: {
-					username:'123',
-					password:'456'
+					username:tenDangNhap,
+					password:matKhau
 				},
 				type: "POST",
 				headers: {
 					'X-CSRF-Token': '{{ csrf_token() }}',
 				},
 				success: function(data){
-					alert("okay");
-
+					if(data==true){
+						window.location.href = '{{route("trang-chu")}}';
+					}
 				}, 
-				error: function(){
-					alert("failure From php side!!! ");
+				error: function(err){				
+					alert("Lỗi! Vui lòng thử lại.");
+					console.log(err);
 				}
 
 			});

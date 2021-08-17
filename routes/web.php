@@ -19,5 +19,5 @@ Route::get('/', function () {
 });
 Route::get('/trang-chu', function () {
     return view('pages/home');
-});
-Route::post('/check-login', [HomeController::class, 'checkLogin']);
+})->name('trang-chu');
+Route::post('/check-login', [HomeController::class, 'checkLogin'])->name('check-login');
