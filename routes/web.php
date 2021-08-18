@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\TaiKhoanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,7 +18,11 @@ use App\Http\Controllers\HomeController;
 Route::get('/', function () {
     return view('pages/login');
 });
+
 Route::get('/trang-chu', function () {
     return view('pages/home');
 })->name('trang-chu');
+
 Route::post('/check-login', [HomeController::class, 'checkLogin'])->name('check-login');
+
+Route::get('/tai-khoan', [TaiKhoanController::class, 'getAllTaiKhoan'])->name('tai-khoan');

@@ -10,6 +10,7 @@
 
 	</style>
 </head>
+@include('layouts/script')
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed">
 	<div class="wrapper">
 		<!-- Preloader -->
@@ -19,7 +20,7 @@
 		@include('layouts/header')
 		@include('layouts/sidebar')
 		<!-- Content Wrapper. Contains page content -->
-		<div class="content-wrapper" style="min-height: 234px;">
+		<div class="content-wrapper text-sm" style="min-height: 234px;">
 			<!-- Content Header (Page header) -->
 			<div class="content-header">
 				<div class="container-fluid">
@@ -28,7 +29,9 @@
 			</div>
 			<!-- /.content-header -->
 			<!-- Main content -->
-			@yield('content')
+			<section class="content">
+				@yield('content')
+			</section>
 			<!-- /.content --> 
 		</div>
 		<!-- Control Sidebar -->
@@ -38,6 +41,6 @@
 		<!-- /.control-sidebar -->
 	</div>
 	<!-- ./wrapper -->
-	@include('layouts/script')
+	
 </body>
 </html>
