@@ -68,14 +68,84 @@
 </div>
 <!-- /.card -->
 
+<!-- modal thêm tài khoản -->
+<div class="modal fade" id="modal-them-tai-khoan">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Thêm tài khoản</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="form-them-tai-khoan" action="javascript:void()">
+          <div class="form-group">
+            <label for="ho-ten-them">Họ tên</label>
+            <input type="text" id="ho-ten-them" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="tai-khoan-them">Tài khoản</label>
+            <input type="text" id="tai-khoan-them" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="mat-khau-them">Mật khẩu</label>
+            <input type="password" id="mat-khau-them" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="mat-khau-2-them">Nhập lại mật khẩu</label>
+            <input type="password" id="mat-khau-2-them" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="gioi-tinh-them">Giới tính</label>
+            <select id="gioi-tinh-them" class="form-control custom-select" required>
+              <option value="" selected disabled>Vui lòng chọn</option>
+              <option value="nam">Nam</option>
+              <option value="nu">Nữ</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="di-dong-them">Di động</label>
+            <input type="tel" id="di-dong-them" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="nhom-quyen-them">Nhóm quyền</label>
+            <select id="nhom-quyen-them" class="form-control custom-select" required>
+              <option value="" selected disabled>Vui lòng chọn</option>
+              <option value="quan_tri">Quản trị</option>
+              <option value="nguoi_dung">Người dùng</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="trang-thai-them">Trạng thái</label>
+            <select id="trang-thai-them" class="form-control custom-select">
+              <option value="1" selected>Hoạt động</option>
+              <option value="0">Ngừng hoạt động</option>
+            </select>
+          </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+          <button type="submit" class="btn btn-primary btn-luu-them">Lưu lại</button>
+        </div>
+      </form>
+    </div>
+      <!-- /.modal-content -->
+  </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
 <script>
   $(function () {
-    var Toast = Swal.mixin({
-      toast: true,
-      position: 'bottom-end',
-      showConfirmButton: false,
-      timer: 4000
-    });
+    toastr.options = {
+      "debug": false,
+      "positionClass": "toast-bottom-right",
+      "onclick": null,
+      "fadeIn": 300,
+      "fadeOut": 1000,
+      "timeOut": 5000,
+      "extendedTimeOut": 1000
+    }
     $("#talbel-tai-khoan").DataTable({
       "responsive": true, 
       "lengthChange": false, 
@@ -96,18 +166,23 @@
       }
     });
 
-    $( '<a class="btn btn-primary btn-them-tai-khoan" style="width: 100px"><i class="fas fa-plus"></i> Thêm</a>' ).appendTo( "#talbel-tai-khoan_wrapper .col-md-6:eq(0)" );
+    $( '<a class="btn btn-primary btn-them-tai-khoan" style="width: 100px" data-toggle="modal" data-target="#modal-them-tai-khoan"><i class="fas fa-plus"></i> Thêm</a>' ).appendTo( "#talbel-tai-khoan_wrapper .col-md-6:eq(0)" );
 
-    $('.btn-them-tai-khoan').click(function(){
-      alert('ád');
+    $('#form-them-tai-khoan').submit(function(){
+      var hoTen = $('#ho-ten-them').val();
+      var taiKhoan = $('#tai-khoan-them').val();
+      var matKhau = $('#mat-khau-them').val();
+      var gioiTinh = $('#gioi-tinh-them').val();
+      var diDong = $('#di-dong-them').val();
+      var nhomQuyen = $('#nhom-quyen-them').val();
+      var trangThai = $('#trang-thai-them').val();
+      alert(hoTen);
+
     });
 
     $('.btn-sua-tai-khoan').click(function(){
       var idTaiKhoan = $(this).attr("data-id");
-      Toast.fire({
-        icon: 'info',
-        title: 'Thái Ba Si Thái Ba Si Thái Ba Si Thái Ba Si'
-      })
+      toastr.info('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
     });
 
     $('.btn-xoa-tai-khoan').click(function(){
