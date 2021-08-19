@@ -1,5 +1,5 @@
 <!-- Navbar -->
-<nav class="main-header navbar navbar-expand navbar-primary navbar-dark text-sm">
+<nav class="main-header navbar navbar-expand navbar-primary navbar-dark">
   <!-- Left navbar links -->
   <ul class="navbar-nav">
     <li class="nav-item">
@@ -56,7 +56,7 @@
     <!-- User Dropdown Menu -->
     <li class="nav-item dropdown">
       <a class="nav-link" data-toggle="dropdown" href="#">
-        <i class="fas fa-user"></i>
+        <i class="fas fa-user-circle"></i>
         {{session('ho-ten')}}
       </a>
       <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">

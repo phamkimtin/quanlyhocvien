@@ -20,6 +20,8 @@ Route::get('/', function () {
 })->name('login');
 
 Route::get('/trang-chu', function () {
+    Session::forget('parent-active-menu');
+    Session::put('active-menu', 'menu-trang-chu');
     return view('pages/home');
 })->name('trang-chu');
 
@@ -27,6 +29,8 @@ Route::post('/check-login', [HomeController::class, 'checkLogin'])->name('check-
 
 Route::get('/tai-khoan', function () {
     if(!session('login-state')) return redirect()->route('login');
+    Session::put('active-menu', 'menu-tai-khoan');
+    Session::put('parent-active-menu', 'menu-danh-muc');
     return view('pages/modules/TaiKhoan/tai-khoan');
 })->name('tai-khoan');
 

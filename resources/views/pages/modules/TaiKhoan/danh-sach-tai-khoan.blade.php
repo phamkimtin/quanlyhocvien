@@ -4,6 +4,7 @@
 			<th>STT</th>
 			<th>Họ tên</th>
 			<th>Tài khoản</th>
+			<th>Giới tính</th>
 			<th>Di động</th>
 			<th>Nhóm quyền</th>
 			<th>Trạng thái</th>
@@ -16,6 +17,7 @@
 			<td class="text-center align-middle">{{$index+1}}</td>
 			<td class="align-middle">{{$dsTK->hoten}}</td>
 			<td class="align-middle">{{$dsTK->username}}</td>
+			<td class="align-middle">@if($dsTK->gioi_tinh=='nam') Nam @else Nữ @endif</td>
 			<td class="align-middle">{{$dsTK->di_dong}}</td>
 			<td class="align-middle">{{$dsTK->nhom_quyen}}</td>
 			<td class="text-center align-middle">
