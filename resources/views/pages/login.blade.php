@@ -19,7 +19,7 @@
 
 				<form action="javascript:void(0);">
 					<div class="input-group mb-3">
-						<input type="text" class="form-control" placeholder="Tên đăng nhập" id="ten-dang-nhap">
+						<input type="text" class="form-control" placeholder="Tên đăng nhập" id="ten-dang-nhap" required>
 						<div class="input-group-append">
 							<div class="input-group-text">
 								<span class="fas fa-user"></span>
@@ -27,7 +27,7 @@
 						</div>
 					</div>
 					<div class="input-group mb-3">
-						<input type="password" class="form-control" placeholder="Mật khẩu" id="mat-khau">
+						<input type="password" class="form-control" placeholder="Mật khẩu" id="mat-khau" required>
 						<div class="input-group-append">
 							<div class="input-group-text">
 								<span class="fas fa-lock"></span>
@@ -76,30 +76,48 @@
 
 	@include('layouts/script')
 	<script type="text/javascript">
+		toastr.options = {
+	      "debug": false,
+	      "positionClass": "toast-bottom-right",
+	      "onclick": null,
+	      "fadeIn": 300,
+	      "fadeOut": 1000,
+	      "timeOut": 5000,
+	      "extendedTimeOut": 1000
+	    }
+
 		$('.btn-dang-nhap').click(function(){
 			var tenDangNhap = $('#ten-dang-nhap').val();
 			var matKhau = $('#mat-khau').val();
-			$.ajax({
-				url: '{{route("check-login")}}',
-				data: {
-					username:tenDangNhap,
-					password:matKhau
-				},
-				type: "POST",
-				headers: {
-					'X-CSRF-Token': '{{ csrf_token() }}',
-				},
-				success: function(data){
-					if(data==true){
-						window.location.href = '{{route("trang-chu")}}';
+			if(!tenDangNhap||!matKhau){
+				toastr.warning("Vui lòng nhập đầy đủ thông tin.");
+			}
+			else{
+				$.ajax({
+					url: '{{route("check-login")}}',
+					data: {
+						username:tenDangNhap,
+						password:matKhau
+					},
+					type: "POST",
+					headers: {
+						'X-CSRF-Token': '{{ csrf_token() }}',
+					},
+					success: function(data){
+						if(data==true){
+							window.location.href = '{{route("trang-chu")}}';
+						}
+						else{
+							toastr.warning("Tài khoản hoặc mật khẩu không đúng.");
+						}
+					}, 
+					error: function(err){				
+						alert("Lỗi! Vui lòng thử lại.");
+						console.log(err);
 					}
-				}, 
-				error: function(err){				
-					alert("Lỗi! Vui lòng thử lại.");
-					console.log(err);
-				}
 
-			});
+				});
+			}
 		});
 	</script>
 </body>
