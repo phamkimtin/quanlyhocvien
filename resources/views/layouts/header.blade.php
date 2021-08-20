@@ -65,7 +65,7 @@
           Thông tin cá nhân
         </a>
         <div class="dropdown-divider"></div>
-        <a href="#" class="dropdown-item">
+        <a data-toggle="modal" data-target="#modal-doi-mat-khau" class="dropdown-item">
           <i class="fas fa-key mr-2"></i>
           Đổi mật khẩu
         </a>
@@ -79,3 +79,94 @@
   </ul>
 </nav>
 <!-- /.navbar -->
+
+<!-- modal đổi mật khẩu -->
+<div class="modal fade" id="modal-doi-mat-khau">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Đổi mật khẩu</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="javascript:void(0);">
+          <div class="form-group">
+            <label for="mat-khau-cu">Mật khẩu cũ <b class="text-danger">(*)</b></label>
+            <input type="password" id="mat-khau-cu" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="mat-khau-moi">Mật khẩu mới <b class="text-danger">(*)</b></label>
+            <input type="password" id="mat-khau-moi" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="nhap-lai-mat-khau-moi">Nhập lại mật khẩu mới <b class="text-danger">(*)</b></label>
+            <input type="password" id="nhap-lai-mat-khau-moi" class="form-control" required>
+          </div>
+          <div class="modal-footer justify-content-between">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            <button type="submit" class="btn btn-primary btn-luu-doi-mat-khau">Lưu lại</button>
+          </div>
+        </form>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+</div>
+<!-- /.modal đổi mật khẩu -->
+<script type="text/javascript">
+  toastr.options = {
+    "debug": false,
+    "positionClass": "toast-bottom-right",
+    "onclick": null,
+    "fadeIn": 300,
+    "fadeOut": 1000,
+    "timeOut": 5000,
+    "extendedTimeOut": 1000,
+    "progressBar": true
+  }
+  $('.btn-luu-doi-mat-khau').click(function(){
+    var matKhauCu = $('#mat-khau-cu').val();
+    var matKhauMoi = $('#mat-khau-moi').val();
+    var nhapLaiMatKhauMoi = $('#nhap-lai-mat-khau-moi').val();
+    if(!matKhauCu||!matKhauMoi||!nhapLaiMatKhauMoi){
+      toastr.warning("Vui lòng nhập vào các ô bắt buộc.");
+      return;
+    }
+    if(matKhauMoi!=nhapLaiMatKhauMoi){
+      toastr.warning("Mật khẩu nhập lại không đúng.");
+      return;
+    }
+    $.ajax({
+      url: '{{route("doi-mat-khau")}}',
+      data: {
+        userName:"{{session('username')}}",
+        matKhauCu:matKhauCu,
+        matKhauMoi:matKhauMoi
+      },
+      type: "POST",
+      headers: {
+        'X-CSRF-Token': '{{ csrf_token() }}',
+      },
+      success: function(data){
+        if(data==true){
+          toastr.success("Đổi mật khẩu thành công.");
+          $('#modal-doi-mat-khau').find('form')[0].reset();
+          $('#modal-doi-mat-khau').modal('hide');
+        }
+        else if(data==-1){
+          toastr.error("Mật khẩu cũ không đúng.");
+        }
+        else{
+          toastr.error("Lỗi! Vui lòng thử lại.");
+        }
+      }, 
+      error: function(err){       
+        toastr.error("Lỗi! Vui lòng thử lại.");
+        console.log(err);
+      }
+    });
+  });
+</script>

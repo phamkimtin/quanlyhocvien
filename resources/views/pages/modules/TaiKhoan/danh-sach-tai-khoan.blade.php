@@ -62,11 +62,11 @@
 					<input type="hidden" id="id-tai-khoan-sua">
 					<div class="row">
 						<div class="form-group col-sm-6">
-							<label for="ho-ten-sua">Họ tên <i class="text-danger">*</i></label>
+							<label for="ho-ten-sua">Họ tên <b class="text-danger">(*)</b></label>
 							<input type="text" id="ho-ten-sua" class="form-control" required>
 						</div>
 						<div class="form-group col-sm-6">
-							<label for="gioi-tinh-sua">Giới tính <i class="text-danger">*</i></label>
+							<label for="gioi-tinh-sua">Giới tính <b class="text-danger">(*)</b></label>
 							<select id="gioi-tinh-sua" class="form-control custom-select" required>
 								<option value="" disabled>Vui lòng chọn</option>
 								<option value="nam">Nam</option>
@@ -76,7 +76,7 @@
 					</div>
 					<div class="row">
 						<div class="form-group col-sm-6">
-							<label for="tai-khoan-sua">Tài khoản <i class="text-danger">*</i></label>
+							<label for="tai-khoan-sua">Tài khoản <b class="text-danger">(*)</b></label>
 							<input type="text" id="tai-khoan-sua" class="form-control" disabled>
 						</div>
 						<div class="form-group col-sm-6">
@@ -90,7 +90,7 @@
 							<input type="tel" id="di-dong-sua" class="form-control">
 						</div>
 						<div class="form-group col-sm-6">
-							<label for="nhom-quyen-sua">Nhóm quyền <i class="text-danger">*</i></label>
+							<label for="nhom-quyen-sua">Nhóm quyền <b class="text-danger">(*)</b></label>
 							<select id="nhom-quyen-sua" class="form-control custom-select" required>
 								<option value="" disabled>Vui lòng chọn</option>
 								<option value="quan_tri">Quản trị</option>
@@ -99,7 +99,7 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="trang-thai-sua">Trạng thái <i class="text-danger">*</i></label>
+						<label for="trang-thai-sua">Trạng thái <b class="text-danger">(*)</b></label>
 						<select id="trang-thai-sua" class="form-control custom-select">
 							<option value="1">Hoạt động</option>
 							<option value="0">Ngừng hoạt động</option>
@@ -144,7 +144,7 @@
     	var idTaiKhoan = $(this).attr('data-id');
     	Swal.fire({
     		title: 'Xác nhận xóa?',
-    		text: "Lưu ý! Thao tác này không thể hoàn lại!",
+    		text: "Lưu ý! Dữ liệu đã xóa không thể khôi phục lại!",
     		icon: 'warning',
     		showCancelButton: true,
     		confirmButtonColor: '#3085d6',

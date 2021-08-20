@@ -68,4 +68,14 @@ class TaiKhoanController extends Controller
 			return $ex;
 		}
 	}
+
+	public function doiMatKhau(Request $request){
+		if(!session('login-state')) return redirect()->route('login');
+		$TaiKhoan = TaiKhoanModel::getFromUsername($request->userName);
+		if($TaiKhoan==false) return false;
+		if($TaiKhoan->password!=base64_encode(md5($request->matKhauCu)).'z') return -1;
+		$TaiKhoan->password = base64_encode(md5($request->matKhauMoi)).'z';
+		$TaiKhoan->save();
+		return true;
+	}
 }

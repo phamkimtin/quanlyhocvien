@@ -21,4 +21,12 @@ class TaiKhoanModel extends Model
         }
         return $user->first();
     }
+
+    public static function getFromUsername($userName){
+        $user = TaiKhoanModel::where('username','=',$userName);
+        if($user->count()==0){
+            return false;
+        }
+        return $user->first();
+    }
 }

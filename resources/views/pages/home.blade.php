@@ -16,6 +16,6 @@
 @section('content')
   {{Session::get('username')}}
   @for($i=1;$i<1000;$i++)
-    Nội dung Thái ba si <br>
+    Nội dung <br>
   @endfor
 @endsection

@@ -45,3 +45,5 @@ Route::post('/xoa-tai-khoan', [TaiKhoanController::class, 'xoaTaiKhoan'])->name(
 Route::post('/load-tai-khoan-sua', [TaiKhoanController::class, 'loadTaiKhoanSua'])->name('load-tai-khoan-sua');
 
 Route::post('/luu-tai-khoan-sua', [TaiKhoanController::class, 'luuTaiKhoanSua'])->name('luu-tai-khoan-sua');
+
+Route::post('/doi-mat-khau', [TaiKhoanController::class, 'doiMatKhau'])->name('doi-mat-khau');

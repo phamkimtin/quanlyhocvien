@@ -37,11 +37,11 @@
         <form action="javascript:void(0);">
           <div class="row">
             <div class="form-group col-sm-6">
-              <label for="ho-ten-them">Họ tên <i class="text-danger">*</i></label>
+              <label for="ho-ten-them">Họ tên <b class="text-danger">(*)</b></label>
               <input type="text" id="ho-ten-them" class="form-control" required>
             </div>
             <div class="form-group col-sm-6">
-              <label for="gioi-tinh-them">Giới tính <i class="text-danger">*</i></label>
+              <label for="gioi-tinh-them">Giới tính <b class="text-danger">(*)</b></label>
               <select id="gioi-tinh-them" class="form-control custom-select" required>
                 <option value="" selected disabled>Vui lòng chọn</option>
                 <option value="nam">Nam</option>
@@ -51,7 +51,7 @@
           </div>
           <div class="row">
             <div class="form-group col-sm-6">
-              <label for="tai-khoan-them">Tài khoản <i class="text-danger">*</i></label>
+              <label for="tai-khoan-them">Tài khoản <b class="text-danger">(*)</b></label>
               <input type="text" id="tai-khoan-them" class="form-control" required>
             </div>
             <div class="form-group col-sm-6">
@@ -65,7 +65,7 @@
               <input type="tel" id="di-dong-them" class="form-control">
             </div>
             <div class="form-group col-sm-6">
-              <label for="nhom-quyen-them">Nhóm quyền <i class="text-danger">*</i></label>
+              <label for="nhom-quyen-them">Nhóm quyền <b class="text-danger">(*)</b></label>
               <select id="nhom-quyen-them" class="form-control custom-select" required>
                 <option value="" selected disabled>Vui lòng chọn</option>
                 <option value="quan_tri">Quản trị</option>
@@ -74,7 +74,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="trang-thai-them">Trạng thái <i class="text-danger">*</i></label>
+            <label for="trang-thai-them">Trạng thái <b class="text-danger">(*)</b></label>
             <select id="trang-thai-them" class="form-control custom-select">
               <option value="1" selected>Hoạt động</option>
               <option value="0">Ngừng hoạt động</option>
@@ -101,7 +101,8 @@
       "fadeIn": 300,
       "fadeOut": 1000,
       "timeOut": 5000,
-      "extendedTimeOut": 1000
+      "extendedTimeOut": 1000,
+      "progressBar": true
     }
 
     $.ajax({
