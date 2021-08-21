@@ -42,63 +42,33 @@
 </table>
 
 <!-- modal sửa tài khoản -->
-<div class="modal fade" id="modal-sua-tai-khoan">
-	<div class="modal-dialog modal-lg">
+<div class="modal fade" id="modal-sua-dan-toc">
+	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title">Sửa tài khoản</h4>
+				<h4 class="modal-title">Sửa dân tộc</h4>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
 			<div class="modal-body">			
 				<form action="javascript:void(0);">
-					<input type="hidden" id="id-tai-khoan-sua">
-					<div class="row">
-						<div class="form-group col-sm-6">
-							<label for="ho-ten-sua">Họ tên <b class="text-danger">(*)</b></label>
-							<input type="text" id="ho-ten-sua" class="form-control" required>
-						</div>
-						<div class="form-group col-sm-6">
-							<label for="gioi-tinh-sua">Giới tính <b class="text-danger">(*)</b></label>
-							<select id="gioi-tinh-sua" class="form-control custom-select" required>
-								<option value="" disabled>Vui lòng chọn</option>
-								<option value="nam">Nam</option>
-								<option value="nu">Nữ</option>
-							</select>
-						</div>
-					</div>
-					<div class="row">
-						<div class="form-group col-sm-6">
-							<label for="tai-khoan-sua">Tài khoản <b class="text-danger">(*)</b></label>
-							<input type="text" id="tai-khoan-sua" class="form-control" disabled>
-						</div>
-						<div class="form-group col-sm-6">
-							<label for="mat-khau-sua">Mật khẩu</label>
-							<input type="text" id="mat-khau-sua" class="form-control" placeholder="Để trống nếu không thay đổi mật khẩu">
-						</div>
-					</div>
-					<div class="row">
-						<div class="form-group col-sm-6">
-							<label for="di-dong-sua">Di động</label>
-							<input type="tel" id="di-dong-sua" class="form-control">
-						</div>
-						<div class="form-group col-sm-6">
-							<label for="nhom-quyen-sua">Nhóm quyền <b class="text-danger">(*)</b></label>
-							<select id="nhom-quyen-sua" class="form-control custom-select" required>
-								<option value="" disabled>Vui lòng chọn</option>
-								<option value="quan_tri">Quản trị</option>
-								<option value="nguoi_dung">Người dùng</option>
-							</select>
-						</div>
-					</div>
+					<input type="hidden" id="id-dan-toc-sua">
 					<div class="form-group">
-						<label for="trang-thai-sua">Trạng thái <b class="text-danger">(*)</b></label>
-						<select id="trang-thai-sua" class="form-control custom-select">
-							<option value="1">Hoạt động</option>
-							<option value="0">Ngừng hoạt động</option>
-						</select>
-					</div>
+            <label for="ma-dan-toc-sua">Mã dân tộc<b class="text-danger">(*)</b></label>
+            <input type="text" id="ma-dan-toc-sua" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="ten-dan-toc-sua">Tên dân tộc<b class="text-danger">(*)</b></label>
+            <input type="text" id="ten-dan-toc-sua" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="trang-thai-sua">Trạng thái <b class="text-danger">(*)</b></label>
+            <select id="trang-thai-sua" class="form-control custom-select">
+              <option value="1" selected>Hoạt động</option>
+              <option value="0">Ngừng hoạt động</option>
+            </select>
+          </div>
 					<div class="modal-footer justify-content-between">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
 						<button type="submit" class="btn btn-primary btn-luu-sua">Lưu lại</button>
@@ -132,10 +102,10 @@
       }
     });
 
-    $( '<a class="btn btn-primary btn-sua-dan-toc" style="width: 100px" data-toggle="modal" data-target="#modal-sua-dan-toc"><i class="fas fa-plus"></i> Thêm</a>' ).appendTo( "#table-dan-toc_wrapper .col-md-6:eq(0)" );
+    $( '<a class="btn btn-primary btn-them-dan-toc" style="width: 100px" data-toggle="modal" data-target="#modal-them-dan-toc"><i class="fas fa-plus"></i> Thêm</a>' ).appendTo( "#table-dan-toc_wrapper .col-md-6:eq(0)" );
 
-    $('.btn-xoa-tai-khoan').click(function(){
-    	var idTaiKhoan = $(this).attr('data-id');
+    $('.btn-xoa-dan-toc').click(function(){
+    	var idDanToc = $(this).attr('data-id');
     	Swal.fire({
     		title: 'Xác nhận xóa?',
     		text: "Lưu ý! Dữ liệu đã xóa không thể khôi phục lại!",
@@ -148,9 +118,9 @@
     	}).then((result) => {
     		if (result.isConfirmed) {
     			$.ajax({
-    				url: '{{route("xoa-tai-khoan")}}',
+    				url: '{{route("xoa-dan-toc")}}',
     				data: {
-    					idTaiKhoan:idTaiKhoan
+    					idDanToc:idDanToc
     				},
     				type: "POST",
     				headers: {
@@ -158,13 +128,13 @@
     				},
     				success: function(data){
     					if(data==true){
-    						toastr.success("Xóa tài khoản thành công.");
+    						toastr.success("Xóa dân tộc thành công.");
     						$.ajax({
-    							url: '{{route("load-danh-sach-tai-khoan")}}',
+    							url: '{{route("load-danh-sach-dan-toc")}}',
     							type: "GET",
     							success: function(data){
-    								$('#div-danh-sach-tai-khoan').empty();
-    								$('#div-danh-sach-tai-khoan').html(data);
+    								$('#div-danh-sach-dan-toc').empty();
+    								$('#div-danh-sach-dan-toc').html(data);
     							}, 
     							error: function(err){       
     								toastr.error("Lỗi! Vui lòng thử lại.");
@@ -182,26 +152,23 @@
     	})
     });
 
-    $('.btn-sua-tai-khoan').click(function(){
-    	$('#modal-sua-tai-khoan').find('form')[0].reset();
-    	var idTaiKhoan = $(this).attr('data-id');
+    $('.btn-sua-dan-toc').click(function(){
+    	$('#modal-sua-dan-toc').find('form')[0].reset();
+    	var idDanToc = $(this).attr('data-id');
     	$.ajax({
-    		url: '{{route("load-tai-khoan-sua")}}',
+    		url: '{{route("load-dan-toc-sua")}}',
     		data: {
-    			idTaiKhoan:idTaiKhoan
+    			idDanToc:idDanToc
     		},
     		type: "POST",
     		headers: {
     			'X-CSRF-Token': '{{ csrf_token() }}',
     		},
-    		success: function(taikhoan){
-    			$('#id-tai-khoan-sua').val(idTaiKhoan);
-    			$('#ho-ten-sua').val(taikhoan['hoten']);
-    			$('#gioi-tinh-sua').val(taikhoan['gioi_tinh']);
-    			$('#tai-khoan-sua').val(taikhoan['username']);
-    			$('#di-dong-sua').val(taikhoan['di_dong']);
-    			$('#nhom-quyen-sua').val(taikhoan['nhom_quyen']);
-    			$('#trang-thai-sua').val(taikhoan['state']);
+    		success: function(dantoc){
+    			$('#id-dan-toc-sua').val(idDanToc);
+    			$('#ma-dan-toc-sua').val(dantoc['ma_dan_toc']);
+    			$('#ten-dan-toc-sua').val(dantoc['ten_dan_toc']);
+    			$('#trang-thai-sua').val(dantoc['state']);
     		}, 
     		error: function(err){       
     			toastr.error("Lỗi! Vui lòng thử lại.");
@@ -211,22 +178,16 @@
     });
 
     $('.btn-luu-sua').click(function(){
-    	var idTaiKhoanSua = $('#id-tai-khoan-sua').val();
-    	var hoTenSua = $('#ho-ten-sua').val();
-    	var matKhauSua = $('#mat-khau-sua').val();
-    	var gioiTinhSua = $('#gioi-tinh-sua').val();
-    	var diDongSua = $('#di-dong-sua').val();
-    	var nhomQuyenSua = $('#nhom-quyen-sua').val();
+    	var idDanTocSua = $('#id-dan-toc-sua').val();
+    	var maDanTocSua = $('#ma-dan-toc-sua').val();
+    	var tenDanTocSua = $('#ten-dan-toc-sua').val();
     	var trangThaiSua = $('#trang-thai-sua').val();
     	$.ajax({
-    		url: '{{route("luu-tai-khoan-sua")}}',
+    		url: '{{route("luu-dan-toc-sua")}}',
     		data: {
-    			idTaiKhoanSua:idTaiKhoanSua,
-    			hoTenSua:hoTenSua,
-    			matKhauSua:matKhauSua,
-    			gioiTinhSua:gioiTinhSua,
-    			diDongSua:diDongSua,
-    			nhomQuyenSua:nhomQuyenSua,
+    			idDanTocSua:idDanTocSua,
+    			maDanTocSua:maDanTocSua,
+    			tenDanTocSua:tenDanTocSua,
     			trangThaiSua:trangThaiSua
     		},
     		type: "POST",
@@ -235,14 +196,14 @@
     		},
     		success: function(data){
     			if(data==true){
-    				toastr.success("Cập nhật thông tin tài khoản thành công."); 				
-            $('#modal-sua-tai-khoan').modal('hide');
+    				toastr.success("Cập nhật thông tin dân tộc thành công."); 				
+            $('#modal-sua-dan-toc').modal('hide');
     				$.ajax({
-    					url: '{{route("load-danh-sach-tai-khoan")}}',
+    					url: '{{route("load-danh-sach-dan-toc")}}',
     					type: "GET",
     					success: function(data){
-    						$('#div-danh-sach-tai-khoan').empty();
-    						$('#div-danh-sach-tai-khoan').html(data);
+    						$('#div-danh-sach-dan-toc').empty();
+    						$('#div-danh-sach-dan-toc').html(data);
     					}, 
     					error: function(err){       
     						toastr.error("Lỗi! Vui lòng thử lại.");

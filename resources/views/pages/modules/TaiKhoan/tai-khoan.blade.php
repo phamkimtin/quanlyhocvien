@@ -172,21 +172,7 @@
       }
 
     });
-
-    $('.btn-sua-tai-khoan').click(function(){
-      var idTaiKhoan = $(this).attr("data-id");
-      toastr.info('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
-    });
-
-    $('.btn-xoa-tai-khoan').click(function(){
-      var idTaiKhoan = $(this).attr("data-id");
-      var idTaiKhoan = $(this).attr("data-id");
-      Toast.fire({
-        icon: 'info',
-        title: idTaiKhoan
-      })
-    });
-   
+    
   });
 </script>
 @endsection

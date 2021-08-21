@@ -23,9 +23,9 @@
 </div>
 <!-- /.card -->
 
-<!-- modal thêm tài khoản -->
+<!-- modal thêm dân tộc -->
 <div class="modal fade" id="modal-them-dan-toc">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title">Thêm dân tộc</h4>
@@ -35,43 +35,13 @@
       </div>
       <div class="modal-body">
         <form action="javascript:void(0);">
-          <div class="row">
-            <div class="form-group col-sm-6">
-              <label for="ho-ten-them">Họ tên <b class="text-danger">(*)</b></label>
-              <input type="text" id="ho-ten-them" class="form-control" required>
-            </div>
-            <div class="form-group col-sm-6">
-              <label for="gioi-tinh-them">Giới tính <b class="text-danger">(*)</b></label>
-              <select id="gioi-tinh-them" class="form-control custom-select" required>
-                <option value="" selected disabled>Vui lòng chọn</option>
-                <option value="nam">Nam</option>
-                <option value="nu">Nữ</option>
-              </select>
-            </div>
+          <div class="form-group">
+            <label for="ma-dan-toc-them">Mã dân tộc<b class="text-danger">(*)</b></label>
+            <input type="text" id="ma-dan-toc-them" class="form-control" required>
           </div>
-          <div class="row">
-            <div class="form-group col-sm-6">
-              <label for="tai-khoan-them">Tài khoản <b class="text-danger">(*)</b></label>
-              <input type="text" id="tai-khoan-them" class="form-control" required>
-            </div>
-            <div class="form-group col-sm-6">
-              <label for="mat-khau-them">Mật khẩu</label>
-              <input type="text" id="mat-khau-them" class="form-control" value="vnpt" disabled required>
-            </div>
-          </div>
-          <div class="row">
-            <div class="form-group col-sm-6">
-              <label for="di-dong-them">Di động</label>
-              <input type="tel" id="di-dong-them" class="form-control">
-            </div>
-            <div class="form-group col-sm-6">
-              <label for="nhom-quyen-them">Nhóm quyền <b class="text-danger">(*)</b></label>
-              <select id="nhom-quyen-them" class="form-control custom-select" required>
-                <option value="" selected disabled>Vui lòng chọn</option>
-                <option value="quan_tri">Quản trị</option>
-                <option value="nguoi_dung">Người dùng</option>
-              </select>
-            </div>
+          <div class="form-group">
+            <label for="ten-dan-toc-them">Tên dân tộc<b class="text-danger">(*)</b></label>
+            <input type="text" id="ten-dan-toc-them" class="form-control" required>
           </div>
           <div class="form-group">
             <label for="trang-thai-them">Trạng thái <b class="text-danger">(*)</b></label>
@@ -119,26 +89,18 @@
     });
 
     $('.btn-luu-them').click(function(){
-      var hoTen = $('#ho-ten-them').val();
-      var taiKhoan = $('#tai-khoan-them').val();
-      var matKhau = $('#mat-khau-them').val();
-      var gioiTinh = $('#gioi-tinh-them').val();
-      var diDong = $('#di-dong-them').val();
-      var nhomQuyen = $('#nhom-quyen-them').val();
+      var maDanTocThem = $('#ma-dan-toc-them').val();
+      var tenDanTocThem = $('#ten-dan-toc-them').val();
       var trangThai = $('#trang-thai-them').val();
-      if(!hoTen||!taiKhoan||!matKhau||!nhomQuyen){
+      if(!maDanTocThem||!tenDanTocThem){
         toastr.warning('Vui lòng điền vào các ô bắt buộc.');      
       }
       else{
         $.ajax({
-          url: '{{route("them-tai-khoan")}}',
+          url: '{{route("them-dan-toc")}}',
           data: {
-            hoTen:hoTen,
-            taiKhoan:taiKhoan,
-            matKhau:matKhau,
-            gioiTinh:gioiTinh,
-            diDong:diDong,
-            nhomQuyen:nhomQuyen,
+            maDanTocThem:maDanTocThem,
+            tenDanTocThem:tenDanTocThem,
             trangThai:trangThai
           },
           type: "POST",
@@ -147,15 +109,15 @@
           },
           success: function(data){
             if(data==true){
-              toastr.success("Thêm tài khoản thành công.");
-              $('#modal-them-tai-khoan').find('form')[0].reset();
-              $('#modal-them-tai-khoan').modal('hide');
+              toastr.success("Thêm dân tộc thành công.");
+              $('#modal-them-dan-toc').find('form')[0].reset();
+              $('#modal-them-dan-toc').modal('hide');
               $.ajax({
-                url: '{{route("load-danh-sach-tai-khoan")}}',
+                url: '{{route("load-danh-sach-dan-toc")}}',
                 type: "GET",
                 success: function(data){
-                  $('#div-danh-sach-tai-khoan').empty();
-                  $('#div-danh-sach-tai-khoan').html(data);
+                  $('#div-danh-sach-dan-toc').empty();
+                  $('#div-danh-sach-dan-toc').html(data);
                 }, 
                 error: function(err){       
                   toastr.error("Lỗi! Vui lòng thử lại.");
@@ -171,20 +133,6 @@
         });
       }
 
-    });
-
-    $('.btn-sua-tai-khoan').click(function(){
-      var idTaiKhoan = $(this).attr("data-id");
-      toastr.info('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
-    });
-
-    $('.btn-xoa-tai-khoan').click(function(){
-      var idTaiKhoan = $(this).attr("data-id");
-      var idTaiKhoan = $(this).attr("data-id");
-      Toast.fire({
-        icon: 'info',
-        title: idTaiKhoan
-      })
     });
    
   });
