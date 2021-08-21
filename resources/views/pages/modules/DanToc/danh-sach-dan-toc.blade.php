@@ -1,27 +1,21 @@
-<table id="table-tai-khoan" class="table table-bordered table-striped table-sm">
+<table id="table-dan-toc" class="table table-bordered table-striped table-sm">
 	<thead>
 		<tr>
 			<th>STT</th>
-			<th>Họ tên</th>
-			<th>Tài khoản</th>
-			<th>Giới tính</th>
-			<th>Di động</th>
-			<th>Nhóm quyền</th>
+			<th>Mã dân tộc</th>
+			<th>Tên dân tộc</th>
 			<th>Trạng thái</th>
 			<th>Chức năng</th>
 		</tr>
 	</thead>
 	<tbody>
-		@foreach($dsTaiKhoan as $index => $dsTK)
+		@foreach($dsDanToc as $index => $dsDT)
 		<tr>
 			<td class="text-center align-middle">{{$index+1}}</td>
-			<td class="align-middle">{{$dsTK->hoten}}</td>
-			<td class="align-middle">{{$dsTK->username}}</td>
-			<td class="align-middle">@if($dsTK->gioi_tinh=='nam') Nam @else Nữ @endif</td>
-			<td class="align-middle">{{$dsTK->di_dong}}</td>
-			<td class="align-middle">{{$dsTK->nhom_quyen}}</td>
+			<td class="align-middle">{{$dsDT->ma_dan_toc}}</td>
+			<td class="align-middle">{{$dsDT->ten_dan_toc}}</td>
 			<td class="text-center align-middle">
-				@if($dsTK->state==1)
+				@if($dsDT->state==1)
 				<span class="badge badge-success">Hoạt động</span>
 				@else
 				<span class="badge badge-danger">Ngừng hoạt động</span>
@@ -33,10 +27,10 @@
 						<span class="sr-only">Toggle Dropdown</span>
 					</button>
 					<div class="dropdown-menu dropdown-menu-right" role="menu">
-						<a class="dropdown-item btn-sua-tai-khoan" data-id="{{$dsTK->id}}" data-toggle="modal" data-target="#modal-sua-tai-khoan">
+						<a class="dropdown-item btn-sua-dan-toc" data-id="{{$dsDT->id}}" data-toggle="modal" data-target="#modal-sua-dan-toc">
 							<i class="fas fa-pencil-alt"></i> Sửa
 						</a>
-						<a class="dropdown-item btn-xoa-tai-khoan" data-id="{{$dsTK->id}}">
+						<a class="dropdown-item btn-xoa-dan-toc" data-id="{{$dsDT->id}}">
 							<i class="fas fa-trash"></i> Xóa
 						</a>
 					</div>
@@ -118,7 +112,7 @@
 	<!-- /.modal -->
 
 <script type="text/javascript">
-	$("#table-tai-khoan").DataTable({
+	$("#table-dan-toc").DataTable({
       "responsive": true, 
       "lengthChange": false, 
       "autoWidth": false,
@@ -138,7 +132,7 @@
       }
     });
 
-    $( '<a class="btn btn-primary btn-them-tai-khoan" style="width: 100px" data-toggle="modal" data-target="#modal-them-tai-khoan"><i class="fas fa-plus"></i> Thêm</a>' ).appendTo( "#table-tai-khoan_wrapper .col-md-6:eq(0)" );
+    $( '<a class="btn btn-primary btn-sua-dan-toc" style="width: 100px" data-toggle="modal" data-target="#modal-sua-dan-toc"><i class="fas fa-plus"></i> Thêm</a>' ).appendTo( "#table-dan-toc_wrapper .col-md-6:eq(0)" );
 
     $('.btn-xoa-tai-khoan').click(function(){
     	var idTaiKhoan = $(this).attr('data-id');

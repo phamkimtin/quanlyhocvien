@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TaiKhoanController;
+use App\Http\Controllers\DanTocController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -47,3 +49,12 @@ Route::post('/load-tai-khoan-sua', [TaiKhoanController::class, 'loadTaiKhoanSua'
 Route::post('/luu-tai-khoan-sua', [TaiKhoanController::class, 'luuTaiKhoanSua'])->name('luu-tai-khoan-sua');
 
 Route::post('/doi-mat-khau', [TaiKhoanController::class, 'doiMatKhau'])->name('doi-mat-khau');
+
+Route::get('/dm-dan-toc', function () {
+    if(!session('login-state')) return redirect()->route('login');
+    Session::put('active-menu', 'menu-dm-danh-toc');
+    Session::put('parent-active-menu', 'menu-danh-muc');
+    return view('pages/modules/DanToc/dan-toc');
+})->name('dm-dan-toc');
+
+Route::get('/load-danh-sach-dan-toc', [DanTocController::class, 'loadDanhSachDanToc'])->name('load-danh-sach-dan-toc');

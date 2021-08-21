@@ -56,7 +56,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="./index3.html" class="nav-link">
+              <a href="{{route('dm-dan-toc')}}" class="nav-link" id="menu-dm-danh-toc">
                 <i class="far fa-address-book nav-icon"></i>
                 <p>Dân tộc</p>
               </a>
