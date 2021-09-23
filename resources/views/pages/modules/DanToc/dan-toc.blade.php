@@ -50,13 +50,14 @@
               <option value="0">Ngừng hoạt động</option>
             </select>
           </div>
-        <div class="modal-footer justify-content-between">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-          <button type="submit" class="btn btn-primary btn-luu-them">Lưu lại</button>
-        </div>
-      </form>
+          <div class="modal-footer justify-content-between">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            <button type="submit" class="btn btn-primary btn-luu-them">Lưu lại</button>
+          </div>
+        </form>
+      </div>
     </div>
-      <!-- /.modal-content -->
+    <!-- /.modal-content -->
   </div>
     <!-- /.modal-dialog -->
 </div>

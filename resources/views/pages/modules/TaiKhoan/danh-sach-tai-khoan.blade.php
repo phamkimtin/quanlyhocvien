@@ -111,11 +111,12 @@
 					</div>
 				</form>
 			</div>
-			<!-- /.modal-content -->
 		</div>
-		<!-- /.modal-dialog -->
+		<!-- /.modal-content -->
 	</div>
-	<!-- /.modal -->
+	<!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
 
 <script type="text/javascript">
 	$("#table-tai-khoan").DataTable({
@@ -140,132 +141,134 @@
 
     $( '<a class="btn btn-primary btn-them-tai-khoan" style="width: 100px" data-toggle="modal" data-target="#modal-them-tai-khoan"><i class="fas fa-plus"></i> Thêm</a>' ).appendTo( "#table-tai-khoan_wrapper .col-md-6:eq(0)" );
 
-    $('.btn-xoa-tai-khoan').click(function(){
-    	var idTaiKhoan = $(this).attr('data-id');
-    	Swal.fire({
-    		title: 'Xác nhận xóa?',
-    		text: "Lưu ý! Dữ liệu đã xóa không thể khôi phục lại!",
-    		icon: 'warning',
-    		showCancelButton: true,
-    		confirmButtonColor: '#3085d6',
-    		cancelButtonColor: '#d33',
-    		confirmButtonText: 'Xóa',
-    		cancelButtonText: 'Hủy',
-    	}).then((result) => {
-    		if (result.isConfirmed) {
-    			$.ajax({
-    				url: '{{route("xoa-tai-khoan")}}',
-    				data: {
-    					idTaiKhoan:idTaiKhoan
-    				},
-    				type: "POST",
-    				headers: {
-    					'X-CSRF-Token': '{{ csrf_token() }}',
-    				},
-    				success: function(data){
-    					if(data==true){
-    						toastr.success("Xóa tài khoản thành công.");
-    						$.ajax({
-    							url: '{{route("load-danh-sach-tai-khoan")}}',
-    							type: "GET",
-    							success: function(data){
-    								$('#div-danh-sach-tai-khoan').empty();
-    								$('#div-danh-sach-tai-khoan').html(data);
-    							}, 
-    							error: function(err){       
-    								toastr.error("Lỗi! Vui lòng thử lại.");
-    								console.log(err);
-    							}
-    						})
-    					}
-    				}, 
-    				error: function(err){       
-    					toastr.error("Lỗi! Vui lòng thử lại.");
-    					console.log(err);
-    				}
-    			});
-    		}
-    	})
-    });
+    $('#table-tai-khoan tbody').on('click', 'tr', function () {
+	    $('.btn-xoa-tai-khoan').click(function(){
+	    	var idTaiKhoan = $(this).attr('data-id');
+	    	Swal.fire({
+	    		title: 'Xác nhận xóa?',
+	    		text: "Lưu ý! Dữ liệu đã xóa không thể khôi phục lại!",
+	    		icon: 'warning',
+	    		showCancelButton: true,
+	    		confirmButtonColor: '#3085d6',
+	    		cancelButtonColor: '#d33',
+	    		confirmButtonText: 'Xóa',
+	    		cancelButtonText: 'Hủy',
+	    	}).then((result) => {
+	    		if (result.isConfirmed) {
+	    			$.ajax({
+	    				url: '{{route("xoa-tai-khoan")}}',
+	    				data: {
+	    					idTaiKhoan:idTaiKhoan
+	    				},
+	    				type: "POST",
+	    				headers: {
+	    					'X-CSRF-Token': '{{ csrf_token() }}',
+	    				},
+	    				success: function(data){
+	    					if(data==true){
+	    						toastr.success("Xóa tài khoản thành công.");
+	    						$.ajax({
+	    							url: '{{route("load-danh-sach-tai-khoan")}}',
+	    							type: "GET",
+	    							success: function(data){
+	    								$('#div-danh-sach-tai-khoan').empty();
+	    								$('#div-danh-sach-tai-khoan').html(data);
+	    							}, 
+	    							error: function(err){       
+	    								toastr.error("Lỗi! Vui lòng thử lại.");
+	    								console.log(err);
+	    							}
+	    						})
+	    					}
+	    				}, 
+	    				error: function(err){       
+	    					toastr.error("Lỗi! Vui lòng thử lại.");
+	    					console.log(err);
+	    				}
+	    			});
+	    		}
+	    	})
+	    });
 
-    $('.btn-sua-tai-khoan').click(function(){
-    	$('#modal-sua-tai-khoan').find('form')[0].reset();
-    	var idTaiKhoan = $(this).attr('data-id');
-    	$.ajax({
-    		url: '{{route("load-tai-khoan-sua")}}',
-    		data: {
-    			idTaiKhoan:idTaiKhoan
-    		},
-    		type: "POST",
-    		headers: {
-    			'X-CSRF-Token': '{{ csrf_token() }}',
-    		},
-    		success: function(taikhoan){
-    			$('#id-tai-khoan-sua').val(idTaiKhoan);
-    			$('#ho-ten-sua').val(taikhoan['hoten']);
-    			$('#gioi-tinh-sua').val(taikhoan['gioi_tinh']);
-    			$('#tai-khoan-sua').val(taikhoan['username']);
-    			$('#di-dong-sua').val(taikhoan['di_dong']);
-    			$('#nhom-quyen-sua').val(taikhoan['nhom_quyen']);
-    			$('#trang-thai-sua').val(taikhoan['state']);
-    		}, 
-    		error: function(err){       
-    			toastr.error("Lỗi! Vui lòng thử lại.");
-    			console.log(err);
-    		}
-    	})
-    });
+	    $('.btn-sua-tai-khoan').click(function(){
+	    	$('#modal-sua-tai-khoan').find('form')[0].reset();
+	    	var idTaiKhoan = $(this).attr('data-id');
+	    	$.ajax({
+	    		url: '{{route("load-tai-khoan-sua")}}',
+	    		data: {
+	    			idTaiKhoan:idTaiKhoan
+	    		},
+	    		type: "POST",
+	    		headers: {
+	    			'X-CSRF-Token': '{{ csrf_token() }}',
+	    		},
+	    		success: function(taikhoan){
+	    			$('#id-tai-khoan-sua').val(idTaiKhoan);
+	    			$('#ho-ten-sua').val(taikhoan['hoten']);
+	    			$('#gioi-tinh-sua').val(taikhoan['gioi_tinh']);
+	    			$('#tai-khoan-sua').val(taikhoan['username']);
+	    			$('#di-dong-sua').val(taikhoan['di_dong']);
+	    			$('#nhom-quyen-sua').val(taikhoan['nhom_quyen']);
+	    			$('#trang-thai-sua').val(taikhoan['state']);
+	    		}, 
+	    		error: function(err){       
+	    			toastr.error("Lỗi! Vui lòng thử lại.");
+	    			console.log(err);
+	    		}
+	    	})
+	    });
 
-    $('.btn-luu-sua').click(function(){
-    	var idTaiKhoanSua = $('#id-tai-khoan-sua').val();
-    	var hoTenSua = $('#ho-ten-sua').val();
-    	var matKhauSua = $('#mat-khau-sua').val();
-    	var gioiTinhSua = $('#gioi-tinh-sua').val();
-    	var diDongSua = $('#di-dong-sua').val();
-    	var nhomQuyenSua = $('#nhom-quyen-sua').val();
-    	var trangThaiSua = $('#trang-thai-sua').val();
-    	$.ajax({
-    		url: '{{route("luu-tai-khoan-sua")}}',
-    		data: {
-    			idTaiKhoanSua:idTaiKhoanSua,
-    			hoTenSua:hoTenSua,
-    			matKhauSua:matKhauSua,
-    			gioiTinhSua:gioiTinhSua,
-    			diDongSua:diDongSua,
-    			nhomQuyenSua:nhomQuyenSua,
-    			trangThaiSua:trangThaiSua
-    		},
-    		type: "POST",
-    		headers: {
-    			'X-CSRF-Token': '{{ csrf_token() }}',
-    		},
-    		success: function(data){
-    			if(data==true){
-    				toastr.success("Cập nhật thông tin tài khoản thành công."); 				
-            $('#modal-sua-tai-khoan').modal('hide');
-    				$.ajax({
-    					url: '{{route("load-danh-sach-tai-khoan")}}',
-    					type: "GET",
-    					success: function(data){
-    						$('#div-danh-sach-tai-khoan').empty();
-    						$('#div-danh-sach-tai-khoan').html(data);
-    					}, 
-    					error: function(err){       
-    						toastr.error("Lỗi! Vui lòng thử lại.");
-    						console.log(err);
-    					}
-    				})
-    			}
-    			else{
-    				toastr.error("Lỗi! Vui lòng thử lại.");
-    				console.log(data);
-    			}
-    		}, 
-    		error: function(err){       
-    			toastr.error("Lỗi! Vui lòng thử lại.");
-    			console.log(err);
-    		}
-    	})
-    });
+	    $('.btn-luu-sua').click(function(){
+	    	var idTaiKhoanSua = $('#id-tai-khoan-sua').val();
+	    	var hoTenSua = $('#ho-ten-sua').val();
+	    	var matKhauSua = $('#mat-khau-sua').val();
+	    	var gioiTinhSua = $('#gioi-tinh-sua').val();
+	    	var diDongSua = $('#di-dong-sua').val();
+	    	var nhomQuyenSua = $('#nhom-quyen-sua').val();
+	    	var trangThaiSua = $('#trang-thai-sua').val();
+	    	$.ajax({
+	    		url: '{{route("luu-tai-khoan-sua")}}',
+	    		data: {
+	    			idTaiKhoanSua:idTaiKhoanSua,
+	    			hoTenSua:hoTenSua,
+	    			matKhauSua:matKhauSua,
+	    			gioiTinhSua:gioiTinhSua,
+	    			diDongSua:diDongSua,
+	    			nhomQuyenSua:nhomQuyenSua,
+	    			trangThaiSua:trangThaiSua
+	    		},
+	    		type: "POST",
+	    		headers: {
+	    			'X-CSRF-Token': '{{ csrf_token() }}',
+	    		},
+	    		success: function(data){
+	    			if(data==true){
+	    				toastr.success("Cập nhật thông tin tài khoản thành công."); 				
+	            $('#modal-sua-tai-khoan').modal('hide');
+	    				$.ajax({
+	    					url: '{{route("load-danh-sach-tai-khoan")}}',
+	    					type: "GET",
+	    					success: function(data){
+	    						$('#div-danh-sach-tai-khoan').empty();
+	    						$('#div-danh-sach-tai-khoan').html(data);
+	    					}, 
+	    					error: function(err){       
+	    						toastr.error("Lỗi! Vui lòng thử lại.");
+	    						console.log(err);
+	    					}
+	    				})
+	    			}
+	    			else{
+	    				toastr.error("Lỗi! Vui lòng thử lại.");
+	    				console.log(data);
+	    			}
+	    		}, 
+	    		error: function(err){       
+	    			toastr.error("Lỗi! Vui lòng thử lại.");
+	    			console.log(err);
+	    		}
+	    	})
+	    });
+	  });
 
 </script>

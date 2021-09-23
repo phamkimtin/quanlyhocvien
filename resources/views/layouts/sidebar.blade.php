@@ -44,7 +44,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="./index2.html" class="nav-link">
+              <a href="{{route('khoa-hoc')}}" class="nav-link" id='menu-khoa-hoc'>
                 <i class="far fa-calendar-alt nav-icon"></i>
                 <p>Khóa học</p>
               </a>
@@ -59,6 +59,12 @@
               <a href="{{route('dm-dan-toc')}}" class="nav-link" id="menu-dm-danh-toc">
                 <i class="far fa-address-book nav-icon"></i>
                 <p>Dân tộc</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{route('don-vi')}}" class="nav-link" id="menu-don-vi">
+                <i class="far fa-address-book nav-icon"></i>
+                <p>Đơn vị</p>
               </a>
             </li>
           </ul>

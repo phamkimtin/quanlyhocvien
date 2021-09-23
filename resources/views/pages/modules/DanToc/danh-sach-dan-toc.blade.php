@@ -41,7 +41,7 @@
 	</tbody>
 </table>
 
-<!-- modal sửa tài khoản -->
+<!-- modal sửa dân tộc -->
 <div class="modal fade" id="modal-sua-dan-toc">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -75,11 +75,12 @@
 					</div>
 				</form>
 			</div>
-			<!-- /.modal-content -->
 		</div>
-		<!-- /.modal-dialog -->
+		<!-- /.modal-content -->
 	</div>
-	<!-- /.modal -->
+	<!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
 
 <script type="text/javascript">
 	$("#table-dan-toc").DataTable({
@@ -104,123 +105,122 @@
 
     $( '<a class="btn btn-primary btn-them-dan-toc" style="width: 100px" data-toggle="modal" data-target="#modal-them-dan-toc"><i class="fas fa-plus"></i> Thêm</a>' ).appendTo( "#table-dan-toc_wrapper .col-md-6:eq(0)" );
 
-    $('.btn-xoa-dan-toc').click(function(){
-    	var idDanToc = $(this).attr('data-id');
-    	Swal.fire({
-    		title: 'Xác nhận xóa?',
-    		text: "Lưu ý! Dữ liệu đã xóa không thể khôi phục lại!",
-    		icon: 'warning',
-    		showCancelButton: true,
-    		confirmButtonColor: '#3085d6',
-    		cancelButtonColor: '#d33',
-    		confirmButtonText: 'Xóa',
-    		cancelButtonText: 'Hủy',
-    	}).then((result) => {
-    		if (result.isConfirmed) {
-    			$.ajax({
-    				url: '{{route("xoa-dan-toc")}}',
-    				data: {
-    					idDanToc:idDanToc
-    				},
-    				type: "POST",
-    				headers: {
-    					'X-CSRF-Token': '{{ csrf_token() }}',
-    				},
-    				success: function(data){
-    					if(data==true){
-    						toastr.success("Xóa dân tộc thành công.");
-    						$.ajax({
-    							url: '{{route("load-danh-sach-dan-toc")}}',
-    							type: "GET",
-    							success: function(data){
-    								$('#div-danh-sach-dan-toc').empty();
-    								$('#div-danh-sach-dan-toc').html(data);
-    							}, 
-    							error: function(err){       
-    								toastr.error("Lỗi! Vui lòng thử lại.");
-    								console.log(err);
-    							}
-    						})
-    					}
-    				}, 
-    				error: function(err){       
-    					toastr.error("Lỗi! Vui lòng thử lại.");
-    					console.log(err);
-    				}
-    			});
-    		}
-    	})
-    });
+    	$("#table-dan-toc").on("click", ".btn-xoa-dan-toc", function(){
+	    	var idDanToc = $(this).attr('data-id');
+	    	Swal.fire({
+	    		title: 'Xác nhận xóa?',
+	    		text: "Lưu ý! Dữ liệu đã xóa không thể khôi phục lại!",
+	    		icon: 'warning',
+	    		showCancelButton: true,
+	    		confirmButtonColor: '#3085d6',
+	    		cancelButtonColor: '#d33',
+	    		confirmButtonText: 'Xóa',
+	    		cancelButtonText: 'Hủy',
+	    	}).then((result) => {
+	    		if (result.isConfirmed) {
+	    			$.ajax({
+	    				url: '{{route("xoa-dan-toc")}}',
+	    				data: {
+	    					idDanToc:idDanToc
+	    				},
+	    				type: "POST",
+	    				headers: {
+	    					'X-CSRF-Token': '{{ csrf_token() }}',
+	    				},
+	    				success: function(data){
+	    					if(data==true){
+	    						toastr.success("Xóa dân tộc thành công.");
+	    						$.ajax({
+	    							url: '{{route("load-danh-sach-dan-toc")}}',
+	    							type: "GET",
+	    							success: function(data){
+	    								$('#div-danh-sach-dan-toc').empty();
+	    								$('#div-danh-sach-dan-toc').html(data);
+	    							}, 
+	    							error: function(err){       
+	    								toastr.error("Lỗi! Vui lòng thử lại.");
+	    								console.log(err);
+	    							}
+	    						})
+	    					}
+	    				}, 
+	    				error: function(err){       
+	    					toastr.error("Lỗi! Vui lòng thử lại.");
+	    					console.log(err);
+	    				}
+	    			});
+	    		}
+	    	})
+	    });
+	    $("#table-dan-toc").on("click", ".btn-sua-dan-toc", function(){
+	    	$('#modal-sua-dan-toc').find('form')[0].reset();
+	    	var idDanToc = $(this).attr('data-id');
+	    	$.ajax({
+	    		url: '{{route("load-dan-toc-sua")}}',
+	    		data: {
+	    			idDanToc:idDanToc
+	    		},
+	    		type: "POST",
+	    		headers: {
+	    			'X-CSRF-Token': '{{ csrf_token() }}',
+	    		},
+	    		success: function(dantoc){
+	    			$('#id-dan-toc-sua').val(idDanToc);
+	    			$('#ma-dan-toc-sua').val(dantoc['ma_dan_toc']);
+	    			$('#ten-dan-toc-sua').val(dantoc['ten_dan_toc']);
+	    			$('#trang-thai-sua').val(dantoc['state']);
+	    		}, 
+	    		error: function(err){       
+	    			toastr.error("Lỗi! Vui lòng thử lại.");
+	    			console.log(err);
+	    		}
+	    	})
+	    });
 
-    $('.btn-sua-dan-toc').click(function(){
-    	$('#modal-sua-dan-toc').find('form')[0].reset();
-    	var idDanToc = $(this).attr('data-id');
-    	$.ajax({
-    		url: '{{route("load-dan-toc-sua")}}',
-    		data: {
-    			idDanToc:idDanToc
-    		},
-    		type: "POST",
-    		headers: {
-    			'X-CSRF-Token': '{{ csrf_token() }}',
-    		},
-    		success: function(dantoc){
-    			$('#id-dan-toc-sua').val(idDanToc);
-    			$('#ma-dan-toc-sua').val(dantoc['ma_dan_toc']);
-    			$('#ten-dan-toc-sua').val(dantoc['ten_dan_toc']);
-    			$('#trang-thai-sua').val(dantoc['state']);
-    		}, 
-    		error: function(err){       
-    			toastr.error("Lỗi! Vui lòng thử lại.");
-    			console.log(err);
-    		}
-    	})
-    });
-
-    $('.btn-luu-sua').click(function(){
-    	var idDanTocSua = $('#id-dan-toc-sua').val();
-    	var maDanTocSua = $('#ma-dan-toc-sua').val();
-    	var tenDanTocSua = $('#ten-dan-toc-sua').val();
-    	var trangThaiSua = $('#trang-thai-sua').val();
-    	$.ajax({
-    		url: '{{route("luu-dan-toc-sua")}}',
-    		data: {
-    			idDanTocSua:idDanTocSua,
-    			maDanTocSua:maDanTocSua,
-    			tenDanTocSua:tenDanTocSua,
-    			trangThaiSua:trangThaiSua
-    		},
-    		type: "POST",
-    		headers: {
-    			'X-CSRF-Token': '{{ csrf_token() }}',
-    		},
-    		success: function(data){
-    			if(data==true){
-    				toastr.success("Cập nhật thông tin dân tộc thành công."); 				
-            $('#modal-sua-dan-toc').modal('hide');
-    				$.ajax({
-    					url: '{{route("load-danh-sach-dan-toc")}}',
-    					type: "GET",
-    					success: function(data){
-    						$('#div-danh-sach-dan-toc').empty();
-    						$('#div-danh-sach-dan-toc').html(data);
-    					}, 
-    					error: function(err){       
-    						toastr.error("Lỗi! Vui lòng thử lại.");
-    						console.log(err);
-    					}
-    				})
-    			}
-    			else{
-    				toastr.error("Lỗi! Vui lòng thử lại.");
-    				console.log(data);
-    			}
-    		}, 
-    		error: function(err){       
-    			toastr.error("Lỗi! Vui lòng thử lại.");
-    			console.log(err);
-    		}
-    	})
-    });
+	    $(".btn-luu-sua").on("click", function(){
+	    	var idDanTocSua = $('#id-dan-toc-sua').val();
+	    	var maDanTocSua = $('#ma-dan-toc-sua').val();
+	    	var tenDanTocSua = $('#ten-dan-toc-sua').val();
+	    	var trangThaiSua = $('#trang-thai-sua').val();
+	    	$.ajax({
+	    		url: '{{route("luu-dan-toc-sua")}}',
+	    		data: {
+	    			idDanTocSua:idDanTocSua,
+	    			maDanTocSua:maDanTocSua,
+	    			tenDanTocSua:tenDanTocSua,
+	    			trangThaiSua:trangThaiSua
+	    		},
+	    		type: "POST",
+	    		headers: {
+	    			'X-CSRF-Token': '{{ csrf_token() }}',
+	    		},
+	    		success: function(data){
+	    			if(data==true){
+	    				toastr.success("Cập nhật thông tin dân tộc thành công."); 				
+	            $('#modal-sua-dan-toc').modal('hide');
+	    				$.ajax({
+	    					url: '{{route("load-danh-sach-dan-toc")}}',
+	    					type: "GET",
+	    					success: function(data){
+	    						$('#div-danh-sach-dan-toc').empty();
+	    						$('#div-danh-sach-dan-toc').html(data);
+	    					}, 
+	    					error: function(err){       
+	    						toastr.error("Lỗi! Vui lòng thử lại.");
+	    						console.log(err);
+	    					}
+	    				})
+	    			}
+	    			else{
+	    				toastr.error("Lỗi! Vui lòng thử lại.");
+	    				console.log(data);
+	    			}
+	    		}, 
+	    		error: function(err){       
+	    			toastr.error("Lỗi! Vui lòng thử lại.");
+	    			console.log(err);
+	    		}
+	    	})
+	    });
 
 </script>
