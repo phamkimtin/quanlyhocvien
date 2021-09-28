@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Session;
 use App\Models\TaiKhoanModel;
+use App\Models\QuyenNhomQuyenModel;
+
 
 class HomeController extends Controller
 {
@@ -19,6 +21,12 @@ class HomeController extends Controller
 		Session::put('username', $username);
 		Session::put('ho-ten', $user->hoten);
 		Session::put('nhom-quyen', $user->nhom_quyen);
+		$dsQuyen = QuyenNhomQuyenModel::getQuyenByNhomQuyen($user->nhom_quyen);
+		$arrayQuyen = [];
+		foreach($dsQuyen as $quyen){
+			array_push($arrayQuyen,$quyen->ma_quyen); 
+		}
+		Session::put('quyen', $arrayQuyen);
 		return true;
 	}
 

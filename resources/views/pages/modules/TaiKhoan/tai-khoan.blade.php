@@ -14,6 +14,7 @@
 </div><!-- /.row -->
 @endsection
 @section('content')
+@php use App\Http\Controllers\NhomQuyenController; @endphp
 <!-- Default box -->
 <div class="card">
   <div class="card-body" style="padding: 0px;" id="div-danh-sach-tai-khoan">
@@ -23,6 +24,7 @@
 </div>
 <!-- /.card -->
 
+@if(in_array('edit_tai_khoan',session('quyen')))
 <!-- modal thêm tài khoản -->
 <div class="modal fade" id="modal-them-tai-khoan">
   <div class="modal-dialog modal-lg">
@@ -64,12 +66,16 @@
               <label for="di-dong-them">Di động</label>
               <input type="tel" id="di-dong-them" class="form-control">
             </div>
+            @php
+            $nhomQuyen = NhomQuyenController::getNhomQuyen();
+            @endphp
             <div class="form-group col-sm-6">
               <label for="nhom-quyen-them">Nhóm quyền <b class="text-danger">(*)</b></label>
               <select id="nhom-quyen-them" class="form-control custom-select" required>
                 <option value="" selected disabled>Vui lòng chọn</option>
-                <option value="quan_tri">Quản trị</option>
-                <option value="nguoi_dung">Người dùng</option>
+                @foreach($nhomQuyen as $index => $value)
+                <option value="{{$value->ma_nhom_quyen}}">{{$value->ten_nhom_quyen}}</option>
+                @endforeach
               </select>
             </div>
           </div>
@@ -92,6 +98,7 @@
     <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
+@endif
 
 <script>
   $(function () {
@@ -119,6 +126,7 @@
       }
     });
 
+    @if(in_array('edit_tai_khoan',session('quyen')))
     $('.btn-luu-them').click(function(){
       var hoTen = $('#ho-ten-them').val();
       var taiKhoan = $('#tai-khoan-them').val();
@@ -173,7 +181,7 @@
       }
 
     });
-    
+    @endif
   });
 </script>
 @endsection

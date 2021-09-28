@@ -23,6 +23,7 @@
 </div>
 <!-- /.card -->
 
+@if(in_array('edit_khoa_hoc',session('quyen')))
 <!-- modal thêm khóa học -->
 <div class="modal fade" id="modal-them-khoa-hoc">
   <div class="modal-dialog">
@@ -72,6 +73,7 @@
     <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
+@endif
 
 <script>
   $(function () {
@@ -102,6 +104,7 @@
       }
     });
 
+    @if(in_array('edit_khoa_hoc',session('quyen')))
     $('.btn-luu-them').click(function(){
       var maKhoaHocThem = $('#ma-khoa-hoc-them').val();
       var tenKhoaHocThem = $('#ten-khoa-hoc-them').val();
@@ -152,6 +155,7 @@
       }
 
     });
+    @endif
    
   });
 </script>

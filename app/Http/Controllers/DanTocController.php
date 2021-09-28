@@ -9,13 +9,13 @@ use App\Models\DanTocModel;
 class DanTocController extends Controller
 {
 	public function getAllDanToc(Request $request){
-		
 		$dsDanToc = DanTocModel::getAll();
 		return view('pages/modules/DanToc/dan-toc', compact('dsDanToc'));
 	}
 
 	public function loadDanhSachDanToc(Request $request){
 		if(!session('login-state')) return redirect()->route('login');
+		if(!in_array('view_dan_toc',session('quyen'))) return redirect()->route('404');
 		$dsDanToc = DanTocModel::getAll();
 		return view('pages/modules/DanToc/danh-sach-dan-toc', compact('dsDanToc'));
 	}
@@ -58,13 +58,12 @@ class DanTocController extends Controller
 		}
 	}
 
-	// public function doiMatKhau(Request $request){
-	// 	if(!session('login-state')) return redirect()->route('login');
-	// 	$TaiKhoan = TaiKhoanModel::getFromUsername($request->userName);
-	// 	if($TaiKhoan==false) return false;
-	// 	if($TaiKhoan->password!=base64_encode(md5($request->matKhauCu)).'z') return -1;
-	// 	$TaiKhoan->password = base64_encode(md5($request->matKhauMoi)).'z';
-	// 	$TaiKhoan->save();
-	// 	return true;
-	// }
+	public static function getDsDanToc(){
+		$value = DanTocModel::getAll();
+		return $value;
+	}
+	public static function getDanTocByMa($ma_dan_toc){
+		$value = DanTocModel::where('ma_dan_toc','=',$ma_dan_toc)->first();
+		return $value;
+	}
 }

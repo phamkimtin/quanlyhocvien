@@ -15,6 +15,7 @@ class DonViController extends Controller
 
 	public function loadDanhSachDonVi(Request $request){
 		if(!session('login-state')) return redirect()->route('login');
+		if(!in_array('view_don_vi',session('quyen'))) return redirect()->route('404');
 		$dsDonVi = DonViModel::getAll();
 		return view('pages/modules/DonVi/danh-sach-don-vi', compact('dsDonVi'));
 	}
@@ -62,4 +63,12 @@ class DonViController extends Controller
 		}
 	}
 
+	public static function getDsDonVi(){
+		return $value = DonViModel::where('state','=',1)->get();
+	}
+
+	public static function getDonViByMa($ma_don_vi){
+		$value = DonViModel::where('ma_don_vi','=',$ma_don_vi)->first();
+		return $value;
+	}
 }

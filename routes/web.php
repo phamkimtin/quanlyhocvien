@@ -32,3 +32,11 @@ Route::post('/check-login', [HomeController::class, 'checkLogin'])->name('check-
 Route::get('/logout', [HomeController::class, 'checkLogout'])->name('logout');
 
 Route::post('/doi-mat-khau', [TaiKhoanController::class, 'doiMatKhau'])->name('doi-mat-khau');
+
+Route::get('/404', function () {
+    return view('pages/404');
+})->name('404');
+
+Route::get('/dang-ky-tai-khoan', function () {
+    return view('pages/register');
+})->name('dang-ky-tai-khoan');

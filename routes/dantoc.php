@@ -17,6 +17,7 @@ use App\Http\Controllers\DanTocController;
 
 Route::get('/dm-dan-toc', function () {
     if(!session('login-state')) return redirect()->route('login');
+    if(!in_array('view_dan_toc',session('quyen'))) return redirect()->route('404');
     Session::put('active-menu', 'menu-dm-danh-toc');
     Session::put('parent-active-menu', 'menu-danh-muc');
     return view('pages/modules/DanToc/dan-toc');

@@ -51,21 +51,21 @@
 					</div>
 				</form>
 
-				<div class="social-auth-links text-center mt-2 mb-3">
+				<!-- <div class="social-auth-links text-center mt-2 mb-3">
 					<a href="#" class="btn btn-block btn-primary">
 						<i class="fab fa-facebook mr-2"></i> Sign in using Facebook
 					</a>
 					<a href="#" class="btn btn-block btn-danger">
 						<i class="fab fa-google-plus mr-2"></i> Sign in using Google+
 					</a>
-				</div>
+				</div> -->
 				<!-- /.social-auth-links -->
 
 				<p class="mb-1">
 					<a href="forgot-password.html">Quên mật khẩu</a>
 				</p>
 				<p class="mb-0">
-					<a href="register.html" class="text-center">Đăng ký</a>
+					<a href="{{route('dang-ky-tai-khoan')}}" class="text-center">Đăng ký</a>
 				</p>
 			</div>
 			<!-- /.card-body -->

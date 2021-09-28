@@ -1,47 +1,70 @@
-@php use App\Http\Controllers\NhomQuyenController; @endphp
-<table id="table-tai-khoan" class="table table-bordered table-striped table-sm">
+@php 
+use App\Http\Controllers\HocVienController; 
+use App\Http\Controllers\DanTocController; 
+use App\Http\Controllers\DonViController; 
+use App\Http\Controllers\KhoaHocController;
+@endphp
+<table id="table-hoc-vien" class="table table-bordered table-striped table-sm">
 	<thead>
 		<tr>
 			<th>STT</th>
+			<th>Mã học viên</th>
 			<th>Họ tên</th>
 			<th>Tài khoản</th>
 			<th>Giới tính</th>
+			<th>Năm sinh</th>
+			<th>Nơi sinh</th>
+			<th>Chức vụ Đảng</th>
+			<th>Chức vụ CQ</th>
+			<th>Dân tộc</th>
+			<th>Đơn vị</th>
+			<th>Khóa học</th>
 			<th>Di động</th>
-			<th>Nhóm quyền</th>
 			<th>Trạng thái</th>
-			@if(in_array('edit_tai_khoan',session('quyen')))
+			@if(in_array('edit_hoc_vien',session('quyen')))
 			<th>Chức năng</th>
 			@endif
 		</tr>
 	</thead>
 	<tbody>
-		@foreach($dsTaiKhoan as $index => $dsTK)
+		@foreach($dsUser as $index => $user)
+		@php
+		$hocVien = HocVienController::getHvByIduser($user->id);
+		@endphp
 		<tr>
 			<td class="text-center align-middle">{{$index+1}}</td>
-			<td class="align-middle">{{$dsTK->hoten}}</td>
-			<td class="align-middle">{{$dsTK->username}}</td>
-			<td class="align-middle">@if($dsTK->gioi_tinh=='nam') Nam @else Nữ @endif</td>
-			<td class="align-middle">{{$dsTK->di_dong}}</td>
-			@php $nhomQuyen = NhomQuyenController::getByMaNhomQuyen($dsTK->nhom_quyen); @endphp
-			<td class="align-middle">{{$nhomQuyen->ten_nhom_quyen}}</td>
+			<td class="align-middle">{{$hocVien->ma_hoc_vien}}</td>
+			<td class="align-middle">{{$user->hoten}}</td>
+			<td class="align-middle">{{$user->username}}</td>
+			<td class="align-middle">@if($user->gioi_tinh=='nam') Nam @else Nữ @endif</td>
+			<td class="align-middle">{{$hocVien->nam_sinh}}</td>
+			<td class="align-middle">{{$hocVien->noi_sinh}}</td>
+			<td class="align-middle">{{$hocVien->chuc_vu_dang}}</td>
+			<td class="align-middle">{{$hocVien->chuc_vu_chinh_quyen}}</td>
+			@php $danToc = DanTocController::getDanTocByMa($hocVien->ma_dan_toc); @endphp
+			<td class="align-middle">{{$danToc->ten_dan_toc}}</td>
+			@php $donVi = DonViController::getDonViByMa($hocVien->ma_don_vi); @endphp
+			<td class="align-middle">{{$donVi->ten_don_vi}}</td>
+			<td class="align-middle">{{$hocVien->ma_khoa_hoc}}</td>
+			<td class="align-middle">{{$user->di_dong}}</td>
 			<td class="text-center align-middle">
-				@if($dsTK->state==1)
-				<span class="badge badge-success">Hoạt động</span>
+				@if($hocVien->state==1)
+				<span class="badge badge-success">Chính thức</span>
 				@else
-				<span class="badge badge-danger">Ngừng hoạt động</span>
+				<span class="badge badge-danger">Chờ duyệt</span>
 				@endif
 			</td>
-			@if(in_array('edit_tai_khoan',session('quyen')))
+			@if(in_array('edit_hoc_vien',session('quyen')))
 			<td class="text-center">
 				<div class="btn-group">
 					<button type="button" class="btn btn-info dropdown-toggle dropdown-hover dropdown-icon btn-xs" data-toggle="dropdown">Hành động
 						<span class="sr-only">Toggle Dropdown</span>
 					</button>
 					<div class="dropdown-menu dropdown-menu-right" role="menu">
-						<a class="dropdown-item btn-sua-tai-khoan" data-id="{{$dsTK->id}}" data-toggle="modal" data-target="#modal-sua-tai-khoan">
+						<a class="dropdown-item btn-sua-hoc-vien" data-id="{{$user->id}}" data-toggle="modal" data-target="#modal-sua-hoc-vien">
 							<i class="fas fa-pencil-alt"></i> Sửa
 						</a>
-						<a class="dropdown-item btn-xoa-tai-khoan" data-id="{{$dsTK->id}}">
+						<a class="dropdown-item btn-xoa-hoc-vien" data-id="{{$user->id}}">
 							<i class="fas fa-trash"></i> Xóa
 						</a>
 					</div>
@@ -53,7 +76,7 @@
 	</tbody>
 </table>
 
-@if(in_array('edit_tai_khoan',session('quyen')))
+@if(in_array('edit_hoc_vien',session('quyen')))
 <!-- modal sửa tài khoản -->
 <div class="modal fade" id="modal-sua-tai-khoan">
 	<div class="modal-dialog modal-lg">
@@ -96,16 +119,6 @@
 							<label for="di-dong-sua">Di động</label>
 							<input type="tel" id="di-dong-sua" class="form-control">
 						</div>
-						@php $nhomQuyen = NhomQuyenController::getNhomQuyen(); @endphp
-						<div class="form-group col-sm-6">
-							<label for="nhom-quyen-sua">Nhóm quyền <b class="text-danger">(*)</b></label>
-							<select id="nhom-quyen-sua" class="form-control custom-select" required>
-								<option value="" disabled>Vui lòng chọn</option>
-								@foreach($nhomQuyen as $index => $value)
-                <option value="{{$value->ma_nhom_quyen}}">{{$value->ten_nhom_quyen}}</option>
-                @endforeach
-							</select>
-						</div>
 					</div>
 					<div class="form-group">
 						<label for="trang-thai-sua">Trạng thái <b class="text-danger">(*)</b></label>
@@ -129,10 +142,12 @@
 @endif
 
 <script type="text/javascript">
-	$("#table-tai-khoan").DataTable({
+	$("#table-hoc-vien").DataTable({
       "responsive": true, 
       "lengthChange": false, 
       "autoWidth": false,
+      "pageLength": 50,
+      "ordering": false,
       "language": {
         "lengthMenu": "Display _MENU_ records per page",
         "zeroRecords": "Không tìm thấy dữ liệu phù hợp",
@@ -149,8 +164,9 @@
       }
     });
 
-		@if(in_array('edit_tai_khoan',session('quyen')))
-    $( '<a class="btn btn-primary btn-them-tai-khoan" style="width: 100px" data-toggle="modal" data-target="#modal-them-tai-khoan"><i class="fas fa-plus"></i> Thêm</a>' ).appendTo( "#table-tai-khoan_wrapper .col-md-6:eq(0)" );
+		@if(in_array('edit_hoc_vien',session('quyen')))
+    $( '<a class="btn btn-primary btn-them-hoc-vien" style="width: 100px" data-toggle="modal" data-target="#modal-them-hoc-vien"><i class="fas fa-plus"></i> Thêm</a>' ).appendTo( "#table-hoc-vien_wrapper .col-md-6:eq(0)" );
+    $( '<a class="btn btn-success btn-import-hoc-vien" style="width: 100px; margin-left: 5px" data-toggle="modal" data-target="#modal-import-hoc-vien"><i class="fas fa-file"></i> Import</a>' ).appendTo( "#table-hoc-vien_wrapper .col-md-6:eq(0)" );
 
     $("#table-tai-khoan").on("click", ".btn-xoa-tai-khoan", function(){
     	var idTaiKhoan = $(this).attr('data-id');

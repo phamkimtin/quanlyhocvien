@@ -16,6 +16,7 @@ class KhoaHocController extends Controller
 
 	public function loadDanhSachKhoaHoc(Request $request){
 		if(!session('login-state')) return redirect()->route('login');
+		if(!in_array('view_khoa_hoc',session('quyen'))) return redirect()->route('404');
 		$dsKhoaHoc = KhoaHocModel::getAll();
 		return view('pages/modules/KhoaHoc/danh-sach-khoa-hoc', compact('dsKhoaHoc'));
 	}
@@ -61,4 +62,12 @@ class KhoaHocController extends Controller
 		}
 	}
 
+	public static function getDsKhoaHoc(){
+		return $value = KhoaHocModel::where('state','=',1)->get();
+	}
+
+	public static function getKhoaHocByMa($ma_khoa_hoc){
+		$value = KhoaHocModel::where('ma_khoa_hoc','=',$ma_khoa_hoc)->first();
+		return $value;
+	}
 }

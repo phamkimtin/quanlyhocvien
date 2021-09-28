@@ -15,60 +15,114 @@
       <!-- Add icons to the links using the .nav-icon class
         with font-awesome or any other icon font library -->
         <li class="nav-item">
-            <a href="{{route('trang-chu')}}" class="nav-link" id='menu-trang-chu'>
-              <i class="nav-icon fas fa-home"></i>
-              <p>
-                Trang chủ
-              </p>
-            </a>
-          </li>
+          <a href="{{route('trang-chu')}}" class="nav-link" id='menu-trang-chu'>
+            <i class="nav-icon fas fa-home"></i>
+            <p>
+              Trang chủ
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{route('trang-chu')}}" class="nav-link" id='menu-cham-diem'>
+            <i class="nav-icon fas fa-edit"></i>
+            <p>
+              Chấm điểm
+            </p>
+          </a>
+        </li>
+        <li class="nav-item menu-open">
+          <a href="#" class="nav-link" id="menu-quan-ly">
+            <i class="nav-icon fas fa-list-alt"></i>
+            <p>
+              Quản lý
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            @if(in_array('view_hoc_vien',session('quyen')))
+            <li class="nav-item">
+              <a href="{{route('hoc-vien')}}" class="nav-link" id='menu-hoc-vien'>
+                <i class="fas fa-graduation-cap nav-icon"></i>
+                <p>Học viên</p>
+              </a>
+            </li>
+            @endif
+          </ul>
+        </li>
         <li class="nav-item menu-open">
           <a href="#" class="nav-link" id="menu-danh-muc">
-            <i class="nav-icon fas fa-tachometer-alt"></i>
+            <i class="nav-icon fas fa-list-alt"></i>
             <p>
               Danh mục
               <i class="right fas fa-angle-left"></i>
             </p>
           </a>
           <ul class="nav nav-treeview">
+            @if(in_array('view_tai_khoan',session('quyen')))
             <li class="nav-item">
               <a href="{{route('tai-khoan')}}" class="nav-link" id='menu-tai-khoan'>
                 <i class="fas fa-users nav-icon"></i>
                 <p>Tài khoản</p>
               </a>
             </li>
-            <li class="nav-item">
-              <a href="./index.html" class="nav-link">
-                <i class="far fa-id-card nav-icon"></i>
-                <p>Lớp học</p>
-              </a>
-            </li>
+            @endif
+            @if(in_array('view_khoa_hoc',session('quyen')))
             <li class="nav-item">
               <a href="{{route('khoa-hoc')}}" class="nav-link" id='menu-khoa-hoc'>
                 <i class="far fa-calendar-alt nav-icon"></i>
                 <p>Khóa học</p>
               </a>
             </li>
+            @endif
             <li class="nav-item">
               <a href="./index2.html" class="nav-link">
                 <i class="far fa-file-alt nav-icon"></i>
                 <p>Môn học</p>
               </a>
             </li>
+            @if(in_array('view_dan_toc',session('quyen')))
             <li class="nav-item">
               <a href="{{route('dm-dan-toc')}}" class="nav-link" id="menu-dm-danh-toc">
                 <i class="far fa-address-book nav-icon"></i>
                 <p>Dân tộc</p>
               </a>
             </li>
+            @endif
+            @if(in_array('view_don_vi',session('quyen')))
             <li class="nav-item">
               <a href="{{route('don-vi')}}" class="nav-link" id="menu-don-vi">
-                <i class="far fa-address-book nav-icon"></i>
+                <i class="far fa-building nav-icon"></i>
                 <p>Đơn vị</p>
+              </a>
+            </li>
+            @endif
+          </ul>
+        </li>
+        @if(session('nhom-quyen')=='admin')
+        <li class="nav-item menu-open">
+          <a href="#" class="nav-link" id="menu-phan-quyen">
+            <i class="nav-icon fas fa-tachometer-alt"></i>
+            <p>
+              Phân quyền
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="{{route('phan-nhom-quyen')}}" class="nav-link" id='menu-phan-nhom-quyen'>
+                <i class="fas fa-users-cog nav-icon"></i>
+                <p>Nhóm quyền</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{route('phan-quyen-user')}}" class="nav-link" id='menu-phan-quyen-user'>
+                <i class="fas fa-user-cog nav-icon"></i>
+                <p>Tài khoản</p>
               </a>
             </li>
           </ul>
         </li>
+        @endif
       </ul>
     </nav>
     <!-- /.sidebar-menu -->

@@ -23,6 +23,7 @@
 </div>
 <!-- /.card -->
 
+@if(in_array('edit_dan_toc',session('quyen')))
 <!-- modal thêm dân tộc -->
 <div class="modal fade" id="modal-them-dan-toc">
   <div class="modal-dialog">
@@ -62,8 +63,9 @@
     <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
+@endif
 
-<script>
+<script type="text/javascript">
   $(function () {
     toastr.options = {
       "debug": false,
@@ -89,6 +91,7 @@
       }
     });
 
+    @if(in_array('edit_dan_toc',session('quyen')))
     $('.btn-luu-them').click(function(){
       var maDanTocThem = $('#ma-dan-toc-them').val();
       var tenDanTocThem = $('#ten-dan-toc-them').val();
@@ -133,9 +136,8 @@
           }
         });
       }
-
     });
-   
+    @endif
   });
 </script>
 @endsection

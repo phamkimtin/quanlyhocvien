@@ -7,7 +7,9 @@
 			<th>Từ năm</th>
 			<th>Đến năm</th>
 			<th>Trạng thái</th>
+			@if(in_array('edit_khoa_hoc',session('quyen')))
 			<th>Chức năng</th>
+			@endif
 		</tr>
 	</thead>
 	<tbody>
@@ -25,6 +27,7 @@
 				<span class="badge badge-danger">Ngừng hoạt động</span>
 				@endif
 			</td>
+			@if(in_array('edit_khoa_hoc',session('quyen')))
 			<td class="text-center">
 				<div class="btn-group">
 					<button type="button" class="btn btn-info dropdown-toggle dropdown-hover dropdown-icon btn-xs" data-toggle="dropdown">Hành động
@@ -40,11 +43,13 @@
 					</div>
 				</div>
 			</td>
+			@endif
 		</tr>
 		@endforeach
 	</tbody>
 </table>
 
+@if(in_array('edit_khoa_hoc',session('quyen')))
 <!-- modal sửa tài khoản -->
 <div class="modal fade" id="modal-sua-khoa-hoc">
 	<div class="modal-dialog">
@@ -95,6 +100,7 @@
 	<!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
+@endif
 
 <script type="text/javascript">
 	$("#table-khoa-hoc").DataTable({
@@ -117,136 +123,136 @@
       }
     });
 
+		@if(in_array('edit_khoa_hoc',session('quyen')))
     $( '<a class="btn btn-primary btn-them-khoa-hoc" style="width: 100px" data-toggle="modal" data-target="#modal-them-khoa-hoc"><i class="fas fa-plus"></i> Thêm</a>' ).appendTo( "#table-khoa-hoc_wrapper .col-md-6:eq(0)" );
 
-    $('#table-khoa-hoc tbody').on('click', 'tr', function () {
-	    $('#tu-nam-sua').inputmask('yyyy', { 'placeholder': 'yyyy' });
-	    $('#den-nam-sua').inputmask('yyyy', { 'placeholder': 'yyyy' });
+    $('#tu-nam-sua').inputmask('yyyy', { 'placeholder': 'yyyy' });
+    $('#den-nam-sua').inputmask('yyyy', { 'placeholder': 'yyyy' });
 
-	    $('.btn-xoa-khoa-hoc').click(function(){
-	    	var id = $(this).attr('data-id');
-	    	Swal.fire({
-	    		title: 'Xác nhận xóa?',
-	    		text: "Lưu ý! Dữ liệu đã xóa không thể khôi phục lại!",
-	    		icon: 'warning',
-	    		showCancelButton: true,
-	    		confirmButtonColor: '#3085d6',
-	    		cancelButtonColor: '#d33',
-	    		confirmButtonText: 'Xóa',
-	    		cancelButtonText: 'Hủy',
-	    	}).then((result) => {
-	    		if (result.isConfirmed) {
-	    			$.ajax({
-	    				url: '{{route("xoa-khoa-hoc")}}',
-	    				data: {
-	    					id:id
-	    				},
-	    				type: "POST",
-	    				headers: {
-	    					'X-CSRF-Token': '{{ csrf_token() }}',
-	    				},
-	    				success: function(data){
-	    					if(data==true){
-	    						toastr.success("Xóa khóa học thành công.");
-	    						$.ajax({
-	    							url: '{{route("load-danh-sach-khoa-hoc")}}',
-	    							type: "GET",
-	    							success: function(data){
-	    								$('#div-danh-sach-khoa-hoc').empty();
-	    								$('#div-danh-sach-khoa-hoc').html(data);
-	    							}, 
-	    							error: function(err){       
-	    								toastr.error("Lỗi! Vui lòng thử lại.");
-	    								console.log(err);
-	    							}
-	    						})
-	    					}
-	    				}, 
-	    				error: function(err){       
-	    					toastr.error("Lỗi! Vui lòng thử lại.");
-	    					console.log(err);
-	    				}
-	    			});
-	    		}
-	    	})
-	    });
+    $("#table-khoa-hoc").on("click", ".btn-xoa-khoa-hoc", function(){
+    	var id = $(this).attr('data-id');
+    	Swal.fire({
+    		title: 'Xác nhận xóa?',
+    		text: "Lưu ý! Dữ liệu đã xóa không thể khôi phục lại!",
+    		icon: 'warning',
+    		showCancelButton: true,
+    		confirmButtonColor: '#3085d6',
+    		cancelButtonColor: '#d33',
+    		confirmButtonText: 'Xóa',
+    		cancelButtonText: 'Hủy',
+    	}).then((result) => {
+    		if (result.isConfirmed) {
+    			$.ajax({
+    				url: '{{route("xoa-khoa-hoc")}}',
+    				data: {
+    					id:id
+    				},
+    				type: "POST",
+    				headers: {
+    					'X-CSRF-Token': '{{ csrf_token() }}',
+    				},
+    				success: function(data){
+    					if(data==true){
+    						toastr.success("Xóa khóa học thành công.");
+    						$.ajax({
+    							url: '{{route("load-danh-sach-khoa-hoc")}}',
+    							type: "GET",
+    							success: function(data){
+    								$('#div-danh-sach-khoa-hoc').empty();
+    								$('#div-danh-sach-khoa-hoc').html(data);
+    							}, 
+    							error: function(err){       
+    								toastr.error("Lỗi! Vui lòng thử lại.");
+    								console.log(err);
+    							}
+    						})
+    					}
+    				}, 
+    				error: function(err){       
+    					toastr.error("Lỗi! Vui lòng thử lại.");
+    					console.log(err);
+    				}
+    			});
+    		}
+    	})
+    });
 
-	    $('.btn-sua-khoa-hoc').click(function(){
-	    	$('#modal-sua-khoa-hoc').find('form')[0].reset();
-	    	var id = $(this).attr('data-id');
-	    	$.ajax({
-	    		url: '{{route("load-khoa-hoc-sua")}}',
-	    		data: {
-	    			id:id
-	    		},
-	    		type: "POST",
-	    		headers: {
-	    			'X-CSRF-Token': '{{ csrf_token() }}',
-	    		},
-	    		success: function(khoahoc){
-	    			$('#id-khoa-hoc-sua').val(id);
-	    			$('#ma-khoa-hoc-sua').val(khoahoc['ma_khoa_hoc']);
-	    			$('#ten-khoa-hoc-sua').val(khoahoc['ten_khoa_hoc']);
-	    			$('#tu-nam-sua').val(khoahoc['tu_nam']);
-	    			$('#den-nam-sua').val(khoahoc['den_nam']);
-	    			$('#trang-thai-sua').val(khoahoc['state']);
-	    		}, 
-	    		error: function(err){       
-	    			toastr.error("Lỗi! Vui lòng thử lại.");
-	    			console.log(err);
-	    		}
-	    	})
-	    });
+    $("#table-khoa-hoc").on("click", ".btn-sua-khoa-hoc", function(){
+    	$('#modal-sua-khoa-hoc').find('form')[0].reset();
+    	var id = $(this).attr('data-id');
+    	$.ajax({
+    		url: '{{route("load-khoa-hoc-sua")}}',
+    		data: {
+    			id:id
+    		},
+    		type: "POST",
+    		headers: {
+    			'X-CSRF-Token': '{{ csrf_token() }}',
+    		},
+    		success: function(khoahoc){
+    			$('#id-khoa-hoc-sua').val(id);
+    			$('#ma-khoa-hoc-sua').val(khoahoc['ma_khoa_hoc']);
+    			$('#ten-khoa-hoc-sua').val(khoahoc['ten_khoa_hoc']);
+    			$('#tu-nam-sua').val(khoahoc['tu_nam']);
+    			$('#den-nam-sua').val(khoahoc['den_nam']);
+    			$('#trang-thai-sua').val(khoahoc['state']);
+    		}, 
+    		error: function(err){       
+    			toastr.error("Lỗi! Vui lòng thử lại.");
+    			console.log(err);
+    		}
+    	})
+    });
 
-	    $('.btn-luu-sua').click(function(){
-	    	var idKhoaHocSua = $('#id-khoa-hoc-sua').val();
-	    	var maKhoaHocSua = $('#ma-khoa-hoc-sua').val();
-	    	var tenKhoaHocSua = $('#ten-khoa-hoc-sua').val();
-	    	var tuNamSua = $('#tu-nam-sua').val();
-	    	var denNamSua = $('#den-nam-sua').val();
-	    	var trangThaiSua = $('#trang-thai-sua').val();
-	    	$.ajax({
-	    		url: '{{route("luu-khoa-hoc-sua")}}',
-	    		data: {
-	    			idKhoaHocSua:idKhoaHocSua,
-						maKhoaHocSua:maKhoaHocSua,
-						tenKhoaHocSua:tenKhoaHocSua,
-						tuNamSua:tuNamSua,
-						denNamSua:denNamSua,
-	    			trangThaiSua:trangThaiSua
-	    		},
-	    		type: "POST",
-	    		headers: {
-	    			'X-CSRF-Token': '{{ csrf_token() }}',
-	    		},
-	    		success: function(data){
-	    			if(data==true){
-	    				toastr.success("Cập nhật thông tin khóa học thành công."); 				
-	            $('#modal-sua-khoa-hoc').modal('hide');
-	    				$.ajax({
-	    					url: '{{route("load-danh-sach-khoa-hoc")}}',
-	    					type: "GET",
-	    					success: function(data){
-	    						$('#div-danh-sach-khoa-hoc').empty();
-	    						$('#div-danh-sach-khoa-hoc').html(data);
-	    					}, 
-	    					error: function(err){       
-	    						toastr.error("Lỗi! Vui lòng thử lại.");
-	    						console.log(err);
-	    					}
-	    				})
-	    			}
-	    			else{
-	    				toastr.error("Lỗi! Vui lòng thử lại.");
-	    				console.log(data);
-	    			}
-	    		}, 
-	    		error: function(err){       
-	    			toastr.error("Lỗi! Vui lòng thử lại.");
-	    			console.log(err);
-	    		}
-	    	})
-	    });
-	  });
+    $('.btn-luu-sua').click(function(){
+    	var idKhoaHocSua = $('#id-khoa-hoc-sua').val();
+    	var maKhoaHocSua = $('#ma-khoa-hoc-sua').val();
+    	var tenKhoaHocSua = $('#ten-khoa-hoc-sua').val();
+    	var tuNamSua = $('#tu-nam-sua').val();
+    	var denNamSua = $('#den-nam-sua').val();
+    	var trangThaiSua = $('#trang-thai-sua').val();
+    	$.ajax({
+    		url: '{{route("luu-khoa-hoc-sua")}}',
+    		data: {
+    			idKhoaHocSua:idKhoaHocSua,
+					maKhoaHocSua:maKhoaHocSua,
+					tenKhoaHocSua:tenKhoaHocSua,
+					tuNamSua:tuNamSua,
+					denNamSua:denNamSua,
+    			trangThaiSua:trangThaiSua
+    		},
+    		type: "POST",
+    		headers: {
+    			'X-CSRF-Token': '{{ csrf_token() }}',
+    		},
+    		success: function(data){
+    			if(data==true){
+    				toastr.success("Cập nhật thông tin khóa học thành công."); 				
+            $('#modal-sua-khoa-hoc').modal('hide');
+    				$.ajax({
+    					url: '{{route("load-danh-sach-khoa-hoc")}}',
+    					type: "GET",
+    					success: function(data){
+    						$('#div-danh-sach-khoa-hoc').empty();
+    						$('#div-danh-sach-khoa-hoc').html(data);
+    					}, 
+    					error: function(err){       
+    						toastr.error("Lỗi! Vui lòng thử lại.");
+    						console.log(err);
+    					}
+    				})
+    			}
+    			else{
+    				toastr.error("Lỗi! Vui lòng thử lại.");
+    				console.log(data);
+    			}
+    		}, 
+    		error: function(err){       
+    			toastr.error("Lỗi! Vui lòng thử lại.");
+    			console.log(err);
+    		}
+    	})
+    });
+    @endif
 
 </script>

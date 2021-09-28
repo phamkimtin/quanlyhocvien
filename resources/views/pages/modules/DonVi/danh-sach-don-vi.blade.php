@@ -5,7 +5,9 @@
 			<th>Mã đơn vị</th>
 			<th>Tên đơn vị</th>
 			<th>Trạng thái</th>
+			@if(in_array('edit_don_vi',session('quyen')))
 			<th>Chức năng</th>
+			@endif
 		</tr>
 	</thead>
 	<tbody>
@@ -21,6 +23,7 @@
 				<span class="badge badge-danger">Ngừng hoạt động</span>
 				@endif
 			</td>
+			@if(in_array('edit_don_vi',session('quyen')))
 			<td class="text-center">
 				<div class="btn-group">
 					<button type="button" class="btn btn-info dropdown-toggle dropdown-hover dropdown-icon btn-xs" data-toggle="dropdown">Hành động
@@ -36,11 +39,13 @@
 					</div>
 				</div>
 			</td>
+			@endif
 		</tr>
 		@endforeach
 	</tbody>
 </table>
 
+@if(in_array('edit_don_vi',session('quyen')))
 <!-- modal sửa đơn vị -->
 <div class="modal fade" id="modal-sua-don-vi">
 	<div class="modal-dialog">
@@ -81,6 +86,7 @@
 	<!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
+@endif
 
 <script type="text/javascript">
 	$("#table-don-vi").DataTable({
@@ -103,127 +109,126 @@
       }
     });
 
+		@if(in_array('edit_don_vi',session('quyen')))
     $( '<a class="btn btn-primary btn-them-don-vi" style="width: 100px" data-toggle="modal" data-target="#modal-them-don-vi"><i class="fas fa-plus"></i> Thêm</a>' ).appendTo( "#table-don-vi_wrapper .col-md-6:eq(0)" );
 
-    $('#table-don-vi tbody').on('click', 'tr', function () {
-	    $('.btn-xoa-don-vi').click(function(){
-	    	var id = $(this).attr('data-id');
-	    	Swal.fire({
-	    		title: 'Xác nhận xóa?',
-	    		text: "Lưu ý! Dữ liệu đã xóa không thể khôi phục lại!",
-	    		icon: 'warning',
-	    		showCancelButton: true,
-	    		confirmButtonColor: '#3085d6',
-	    		cancelButtonColor: '#d33',
-	    		confirmButtonText: 'Xóa',
-	    		cancelButtonText: 'Hủy',
-	    	}).then((result) => {
-	    		if (result.isConfirmed) {
-	    			$.ajax({
-	    				url: '{{route("xoa-don-vi")}}',
-	    				data: {
-	    					id:id
-	    				},
-	    				type: "POST",
-	    				headers: {
-	    					'X-CSRF-Token': '{{ csrf_token() }}',
-	    				},
-	    				success: function(data){
-	    					if(data==true){
-	    						toastr.success("Xóa đơn vị thành công.");
-	    						$.ajax({
-	    							url: '{{route("load-danh-sach-don-vi")}}',
-	    							type: "GET",
-	    							success: function(data){
-	    								$('#div-danh-sach-don-vi').empty();
-	    								$('#div-danh-sach-don-vi').html(data);
-	    							}, 
-	    							error: function(err){       
-	    								toastr.error("Lỗi! Vui lòng thử lại.");
-	    								console.log(err);
-	    							}
-	    						})
-	    					}
-	    				}, 
-	    				error: function(err){       
-	    					toastr.error("Lỗi! Vui lòng thử lại.");
-	    					console.log(err);
-	    				}
-	    			});
-	    		}
-	    	})
-	    });
-
-	    $('.btn-sua-don-vi').click(function(){
-	    	$('#modal-sua-don-vi').find('form')[0].reset();
-	    	var id = $(this).attr('data-id');
-	    	$.ajax({
-	    		url: '{{route("load-don-vi-sua")}}',
-	    		data: {
-	    			id:id
-	    		},
-	    		type: "POST",
-	    		headers: {
-	    			'X-CSRF-Token': '{{ csrf_token() }}',
-	    		},
-	    		success: function(donvi){
-	    			$('#id-don-vi-sua').val(id);
-	    			$('#ma-don-vi-sua').val(donvi['ma_don_vi']);
-	    			$('#ten-don-vi-sua').val(donvi['ten_don_vi']);
-	    			$('#trang-thai-sua').val(donvi['state']);
-	    		}, 
-	    		error: function(err){       
-	    			toastr.error("Lỗi! Vui lòng thử lại.");
-	    			console.log(err);
-	    		}
-	    	})
-	    });
-
-	    $('.btn-luu-sua').click(function(){
-	    	var idDonViSua = $('#id-don-vi-sua').val();
-	    	var maDonViSua = $('#ma-don-vi-sua').val();
-	    	var tenDonViSua = $('#ten-don-vi-sua').val();
-	    	var trangThaiSua = $('#trang-thai-sua').val();
-	    	$.ajax({
-	    		url: '{{route("luu-don-vi-sua")}}',
-	    		data: {
-	    			idDonViSua:idDonViSua,
-						maDonViSua:maDonViSua,
-						tenDonViSua:tenDonViSua,
-	    			trangThaiSua:trangThaiSua
-	    		},
-	    		type: "POST",
-	    		headers: {
-	    			'X-CSRF-Token': '{{ csrf_token() }}',
-	    		},
-	    		success: function(data){
-	    			if(data==true){
-	    				toastr.success("Cập nhật thông tin đơn vị thành công."); 				
-	            $('#modal-sua-don-vi').modal('hide');
-	    				$.ajax({
-	    					url: '{{route("load-danh-sach-don-vi")}}',
-	    					type: "GET",
-	    					success: function(data){
-	    						$('#div-danh-sach-don-vi').empty();
-	    						$('#div-danh-sach-don-vi').html(data);
-	    					}, 
-	    					error: function(err){       
-	    						toastr.error("Lỗi! Vui lòng thử lại.");
-	    						console.log(err);
-	    					}
-	    				})
-	    			}
-	    			else{
-	    				toastr.error("Lỗi! Vui lòng thử lại.");
-	    				console.log(data);
-	    			}
-	    		}, 
-	    		error: function(err){       
-	    			toastr.error("Lỗi! Vui lòng thử lại.");
-	    			console.log(err);
-	    		}
-	    	})
-	    });
+    $("#table-don-vi").on("click", ".btn-xoa-don-vi", function(){
+    	var id = $(this).attr('data-id');
+    	Swal.fire({
+    		title: 'Xác nhận xóa?',
+    		text: "Lưu ý! Dữ liệu đã xóa không thể khôi phục lại!",
+    		icon: 'warning',
+    		showCancelButton: true,
+    		confirmButtonColor: '#3085d6',
+    		cancelButtonColor: '#d33',
+    		confirmButtonText: 'Xóa',
+    		cancelButtonText: 'Hủy',
+    	}).then((result) => {
+    		if (result.isConfirmed) {
+    			$.ajax({
+    				url: '{{route("xoa-don-vi")}}',
+    				data: {
+    					id:id
+    				},
+    				type: "POST",
+    				headers: {
+    					'X-CSRF-Token': '{{ csrf_token() }}',
+    				},
+    				success: function(data){
+    					if(data==true){
+    						toastr.success("Xóa đơn vị thành công.");
+    						$.ajax({
+    							url: '{{route("load-danh-sach-don-vi")}}',
+    							type: "GET",
+    							success: function(data){
+    								$('#div-danh-sach-don-vi').empty();
+    								$('#div-danh-sach-don-vi').html(data);
+    							}, 
+    							error: function(err){       
+    								toastr.error("Lỗi! Vui lòng thử lại.");
+    								console.log(err);
+    							}
+    						})
+    					}
+    				}, 
+    				error: function(err){       
+    					toastr.error("Lỗi! Vui lòng thử lại.");
+    					console.log(err);
+    				}
+    			});
+    		}
+    	})
     });
 
+    $("#table-don-vi").on("click", ".btn-sua-don-vi", function(){
+    	$('#modal-sua-don-vi').find('form')[0].reset();
+    	var id = $(this).attr('data-id');
+    	$.ajax({
+    		url: '{{route("load-don-vi-sua")}}',
+    		data: {
+    			id:id
+    		},
+    		type: "POST",
+    		headers: {
+    			'X-CSRF-Token': '{{ csrf_token() }}',
+    		},
+    		success: function(donvi){
+    			$('#id-don-vi-sua').val(id);
+    			$('#ma-don-vi-sua').val(donvi['ma_don_vi']);
+    			$('#ten-don-vi-sua').val(donvi['ten_don_vi']);
+    			$('#trang-thai-sua').val(donvi['state']);
+    		}, 
+    		error: function(err){       
+    			toastr.error("Lỗi! Vui lòng thử lại.");
+    			console.log(err);
+    		}
+    	})
+    });
+
+    $('.btn-luu-sua').click(function(){
+    	var idDonViSua = $('#id-don-vi-sua').val();
+    	var maDonViSua = $('#ma-don-vi-sua').val();
+    	var tenDonViSua = $('#ten-don-vi-sua').val();
+    	var trangThaiSua = $('#trang-thai-sua').val();
+    	$.ajax({
+    		url: '{{route("luu-don-vi-sua")}}',
+    		data: {
+    			idDonViSua:idDonViSua,
+					maDonViSua:maDonViSua,
+					tenDonViSua:tenDonViSua,
+    			trangThaiSua:trangThaiSua
+    		},
+    		type: "POST",
+    		headers: {
+    			'X-CSRF-Token': '{{ csrf_token() }}',
+    		},
+    		success: function(data){
+    			if(data==true){
+    				toastr.success("Cập nhật thông tin đơn vị thành công."); 				
+            $('#modal-sua-don-vi').modal('hide');
+    				$.ajax({
+    					url: '{{route("load-danh-sach-don-vi")}}',
+    					type: "GET",
+    					success: function(data){
+    						$('#div-danh-sach-don-vi').empty();
+    						$('#div-danh-sach-don-vi').html(data);
+    					}, 
+    					error: function(err){       
+    						toastr.error("Lỗi! Vui lòng thử lại.");
+    						console.log(err);
+    					}
+    				})
+    			}
+    			else{
+    				toastr.error("Lỗi! Vui lòng thử lại.");
+    				console.log(data);
+    			}
+    		}, 
+    		error: function(err){       
+    			toastr.error("Lỗi! Vui lòng thử lại.");
+    			console.log(err);
+    		}
+    	})
+    });
+    @endif
 </script>
