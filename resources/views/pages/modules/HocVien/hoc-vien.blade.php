@@ -19,6 +19,29 @@ use App\Http\Controllers\DanTocController;
 use App\Http\Controllers\DonViController; 
 use App\Http\Controllers\KhoaHocController; 
 @endphp
+<div class="row">
+  @php $dsNamHoc = KhoaHocController::getDsNamHoc(); @endphp
+  <div class="form-group col-sm-2">
+    <label>Năm</label>
+    <select class="form-control select2 chon-nam-hoc" id="chon-nam-hoc">
+      <option value="-1" selected>Tất cả</option>
+      @foreach($dsNamHoc as $namHoc)
+      <option value="{{$namHoc->tu_nam}}">{{$namHoc->tu_nam}}</option>
+      @endforeach
+    </select>
+  </div>
+  @php $dsKhoaHoc = KhoaHocController::getDsKhoaHoc(); @endphp
+  <div class="form-group col-sm-6">
+    <label>Khóa học</label>
+    <select class="form-control select2 chon-khoa-hoc" id="chon-khoa-hoc">
+      <option value="-1" selected>Tất cả</option>
+      @foreach($dsKhoaHoc as $khoaHoc)
+      <option value="{{$khoaHoc->ma_khoa_hoc}}">{{$khoaHoc->ten_khoa_hoc}}</option>
+      @endforeach
+    </select>
+  </div>
+</div>
+
 <!-- Default box -->
 <div class="card">
   <div class="card-body" style="padding: 0px;" id="div-danh-sach-hoc-vien">
@@ -114,7 +137,7 @@ use App\Http\Controllers\KhoaHocController;
             <div class="form-group col-sm-6">
               <label for="khoa-hoc-them">Khóa học <b class="text-danger">(*)</b></label>
               <select id="khoa-hoc-them" class="form-control custom-select" required>
-                <option value="" selected>Chưa có khóa học</option>
+                <option value="0" selected>Chưa có khóa học</option>
                 @foreach($dsKhoaHoc as $khoaHoc)
                 <option value="{{$khoaHoc->ma_khoa_hoc}}">{{$khoaHoc->ten_khoa_hoc}}</option>
                 @endforeach
@@ -178,6 +201,132 @@ use App\Http\Controllers\KhoaHocController;
       }
     });
 
+  });
+  @if(in_array('edit_hoc_vien', session('quyen')))
+  $('.btn-luu-them').on('click', function(){
+    var maHocVien = $('#ma-hoc-vien-them').val();
+    var hoTen = $('#ho-ten-them').val();
+    var gioiTinh = $('#gioi-tinh-them').val();
+    var namSinh = $('#nam-sinh-them').val();
+    var noiSinh = $('#noi-sinh-them').val();
+    var diDong = $('#di-dong-them').val();
+    var chucVuDang = $('#chuc-vu-dang-them').val();
+    var chucVuCQ = $('#chuc-vu-chinh-quyen-them').val();
+    var idDanToc = $('#dan-toc-them').val();
+    var idDonVi = $('#don-vi-them').val();
+    var idKhoaHoc = $('#khoa-hoc-them').val();
+    var userName = $('#tai-khoan-them').val();
+    var state = $('#trang-thai-them').val();
+    if(!maHocVien||!hoTen||!gioiTinh||!idDanToc||!idDonVi||!idKhoaHoc||!userName||!state){
+      toastr.warning('Vui lòng điền vào các ô bắt buộc.');
+    }
+    else{
+      $.ajax({
+        url: '{{route("them-hoc-vien")}}',
+        data: {
+          maHocVien:maHocVien,
+          hoTen:hoTen,
+          gioiTinh:gioiTinh,
+          namSinh:namSinh,
+          noiSinh:noiSinh,
+          diDong:diDong,
+          chucVuDang:chucVuDang,
+          chucVuCQ:chucVuCQ,
+          idDanToc:idDanToc,
+          idDonVi:idDonVi,
+          idKhoaHoc:idKhoaHoc,
+          userName:userName,
+          state:state
+        },
+        type: "POST",
+        headers: {
+          'X-CSRF-Token': '{{ csrf_token() }}',
+        },
+        success: function(data){
+          if(data==true){
+            toastr.success("Thêm đơn vị thành công.");
+            $('#modal-them-hoc-vien').find('form')[0].reset();
+            $('#modal-them-hoc-vien').modal('hide');
+            $.ajax({
+              url: '{{route("load-danh-sach-hoc-vien")}}',
+              type: "GET",
+              success: function(data){
+                $('#div-danh-sach-hoc-vien').empty();
+                $('#div-danh-sach-hoc-vien').html(data);
+              }, 
+              error: function(err){       
+                toastr.error("Lỗi! Vui lòng thử lại.");
+                console.log(err);
+              }
+            });
+          }
+        }, 
+        error: function(err){       
+          toastr.error("Lỗi! Vui lòng thử lại.");
+          console.log(err);
+        }
+      });
+    }
+  });
+  @endif
+
+  $('.chon-nam-hoc').on('change', function(){
+    var namHoc = $('.chon-nam-hoc').val();
+    $.ajax({
+      url: '{{route("get-khoa-hoc-by-nam-hoc")}}',
+      data: {
+        namHoc:namHoc
+      },
+      type: "POST",
+      headers: {
+        'X-CSRF-Token': '{{ csrf_token() }}',
+      },
+      success: function(data){
+        $('#chon-khoa-hoc').children().remove().end().append(data);
+      }, 
+      error: function(err){       
+        toastr.error("Lỗi! Vui lòng thử lại.");
+        console.log(err);
+      }
+    });
+  });
+
+  $('.chon-khoa-hoc').on('change', function(){
+    var maKhoaHoc = $('.chon-khoa-hoc').val();
+    if(maKhoaHoc==-1){
+      $.ajax({
+        url: '{{route("load-danh-sach-hoc-vien")}}',
+        type: "GET",
+        success: function(data){
+          toastr.success("Load dữ liệu thành công.");
+          $('#div-danh-sach-hoc-vien').html(data);
+        }, 
+        error: function(err){       
+          toastr.error("Lỗi! Vui lòng thử lại.");
+          console.log(err);
+        }
+      });
+    }
+    else{
+      $.ajax({
+        url: '{{route("load-hoc-vien-by-khoa-hoc")}}',
+        data: {
+          maKhoaHoc:maKhoaHoc
+        },
+        type: "POST",
+        headers: {
+          'X-CSRF-Token': '{{ csrf_token() }}',
+        },
+        success: function(data){
+          toastr.success("Load dữ liệu thành công.");
+          $('#div-danh-sach-hoc-vien').html(data);
+        }, 
+        error: function(err){       
+          toastr.error("Lỗi! Vui lòng thử lại.");
+          console.log(err);
+        }
+      });
+    }
   });
 </script>
 @endsection

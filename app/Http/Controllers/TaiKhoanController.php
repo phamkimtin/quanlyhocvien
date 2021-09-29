@@ -17,7 +17,7 @@ class TaiKhoanController extends Controller
 	public function loadDanhSachTaiKhoan(Request $request){
 		if(!session('login-state')) return redirect()->route('login');
 		if(!in_array('view_tai_khoan',session('quyen'))) return redirect()->route('404');
-		$dsTaiKhoan = TaiKhoanModel::getAll();
+		$dsTaiKhoan = TaiKhoanModel::where('nhom_quyen','!=','hoc_vien')->get();
 		return view('pages/modules/TaiKhoan/danh-sach-tai-khoan', compact('dsTaiKhoan'));
 	}
 

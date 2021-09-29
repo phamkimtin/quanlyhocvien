@@ -17,6 +17,7 @@ class HomeController extends Controller
 		$password_admin = base64_encode(md5('Admin@123')).'z';
 		$user = TaiKhoanModel::getFromUsernamePass($username,$password);
 		if($user==false) return false;
+		if($user->state==0) return 'chua_duyet';
 		Session::put('login-state', true);
 		Session::put('username', $username);
 		Session::put('ho-ten', $user->hoten);

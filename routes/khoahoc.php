@@ -31,3 +31,5 @@ Route::post('/xoa-khoa-hoc', [KhoaHocController::class, 'xoaKhoaHoc'])->name('xo
 Route::post('/load-khoa-hoc-sua', [KhoaHocController::class, 'loadKhoaHocSua'])->name('load-khoa-hoc-sua');
 
 Route::post('/luu-khoa-hoc-sua', [KhoaHocController::class, 'luuKhoaHocSua'])->name('luu-khoa-hoc-sua');
+
+Route::post('/get-khoa-hoc-by-nam-hoc', [KhoaHocController::class, 'getKhoaHocByNam'])->name('get-khoa-hoc-by-nam-hoc');

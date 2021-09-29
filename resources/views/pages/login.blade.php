@@ -108,6 +108,9 @@
 						if(data==true){
 							window.location.href = '{{route("trang-chu")}}';
 						}
+						else if(data=='chua_duyet'){
+							toastr.warning("Tài khoản của bạn chưa được duyệt. <br>Vui lòng liên hệ quản trị.");
+						}
 						else{
 							toastr.warning("Tài khoản hoặc mật khẩu không đúng.");
 						}

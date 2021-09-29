@@ -24,10 +24,12 @@ Route::get('/hoc-vien', function () {
 
 Route::get('/load-danh-sach-hoc-vien', [HocVienController::class, 'loadDanhSachHocVien'])->name('load-danh-sach-hoc-vien');
 
-// Route::post('/them-don-vi', [DonViController::class, 'themDonVi'])->name('them-don-vi');
+Route::post('/them-hoc-vien', [HocVienController::class, 'themHocVien'])->name('them-hoc-vien');
 
-// Route::post('/xoa-don-vi', [DonViController::class, 'xoaDonVi'])->name('xoa-don-vi');
+Route::post('/xoa-hoc-vien', [HocVienController::class, 'xoaHocVien'])->name('xoa-hoc-vien');
 
-// Route::post('/load-don-vi-sua', [DonViController::class, 'loadDonViSua'])->name('load-don-vi-sua');
+Route::post('/load-hoc-vien-sua', [HocVienController::class, 'loadHocVienSua'])->name('load-hoc-vien-sua');
 
-// Route::post('/luu-don-vi-sua', [DonViController::class, 'luuDonViSua'])->name('luu-don-vi-sua');
+Route::post('/luu-hoc-vien-sua', [HocVienController::class, 'luuHocVienSua'])->name('luu-hoc-vien-sua');
+
+Route::post('/load-hoc-vien-by-khoa-hoc', [HocVienController::class, 'loadHocVienByKhoaHoc'])->name('load-hoc-vien-by-khoa-hoc');

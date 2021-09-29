@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Session;
 use App\Models\KhoaHocModel;
+use DB;
 
 class KhoaHocController extends Controller
 {
@@ -69,5 +70,23 @@ class KhoaHocController extends Controller
 	public static function getKhoaHocByMa($ma_khoa_hoc){
 		$value = KhoaHocModel::where('ma_khoa_hoc','=',$ma_khoa_hoc)->first();
 		return $value;
+	}
+
+	public static function getDsNamHoc(){
+		$value = KhoaHocModel::select('tu_nam')
+						    ->orderBy('tu_nam','DESC')
+						    ->groupBy('tu_nam')
+						    ->get();
+		return $value;
+	}
+
+	public static function getKhoaHocByNam(Request $request){
+		if($request->namHoc==-1){
+			$dsKhoaHoc = KhoaHocModel::where('state','=',1)->get();
+		}
+		else{
+			$dsKhoaHoc = KhoaHocModel::where('state','=',1)->where('tu_nam','=',$request->namHoc)->get();
+		}
+		return view('pages/modules/HocVien/ajax/get-khoa-hoc-by-nam-hoc', compact('dsKhoaHoc'));
 	}
 }

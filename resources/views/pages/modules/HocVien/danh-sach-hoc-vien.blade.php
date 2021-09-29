@@ -45,7 +45,7 @@ use App\Http\Controllers\KhoaHocController;
 			<td class="align-middle">{{$danToc->ten_dan_toc}}</td>
 			@php $donVi = DonViController::getDonViByMa($hocVien->ma_don_vi); @endphp
 			<td class="align-middle">{{$donVi->ten_don_vi}}</td>
-			<td class="align-middle">{{$hocVien->ma_khoa_hoc}}</td>
+			<td class="align-middle">@if($hocVien->ma_khoa_hoc=='0')Chưa có khóa học @else {{$hocVien->ma_khoa_hoc}} @endif</td>
 			<td class="align-middle">{{$user->di_dong}}</td>
 			<td class="text-center align-middle">
 				@if($hocVien->state==1)
@@ -57,7 +57,7 @@ use App\Http\Controllers\KhoaHocController;
 			@if(in_array('edit_hoc_vien',session('quyen')))
 			<td class="text-center">
 				<div class="btn-group">
-					<button type="button" class="btn btn-info dropdown-toggle dropdown-hover dropdown-icon btn-xs" data-toggle="dropdown">Hành động
+					<button type="button" class="btn btn-info dropdown-hover dropdown-icon btn-xs" data-toggle="dropdown"><i class="fa fa-cogs"></i>
 						<span class="sr-only">Toggle Dropdown</span>
 					</button>
 					<div class="dropdown-menu dropdown-menu-right" role="menu">
@@ -66,6 +66,9 @@ use App\Http\Controllers\KhoaHocController;
 						</a>
 						<a class="dropdown-item btn-xoa-hoc-vien" data-id="{{$user->id}}">
 							<i class="fas fa-trash"></i> Xóa
+						</a>
+						<a class="dropdown-item btn-duyet-hoc-vien" data-id="{{$user->id}}">
+							<i class="fas fa-check-circle"></i> Duyệt nhanh
 						</a>
 					</div>
 				</div>
@@ -77,12 +80,12 @@ use App\Http\Controllers\KhoaHocController;
 </table>
 
 @if(in_array('edit_hoc_vien',session('quyen')))
-<!-- modal sửa tài khoản -->
-<div class="modal fade" id="modal-sua-tai-khoan">
-	<div class="modal-dialog modal-lg">
+<!-- modal sửa học viên -->
+<div class="modal fade" id="modal-sua-hoc-vien">
+	<div class="modal-dialog modal-xl">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title">Sửa tài khoản</h4>
+				<h4 class="modal-title">Sửa học viên</h4>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
@@ -91,42 +94,102 @@ use App\Http\Controllers\KhoaHocController;
 				<form action="javascript:void(0);">
 					<input type="hidden" id="id-tai-khoan-sua">
 					<div class="row">
-						<div class="form-group col-sm-6">
-							<label for="ho-ten-sua">Họ tên <b class="text-danger">(*)</b></label>
-							<input type="text" id="ho-ten-sua" class="form-control" required>
-						</div>
-						<div class="form-group col-sm-6">
-							<label for="gioi-tinh-sua">Giới tính <b class="text-danger">(*)</b></label>
-							<select id="gioi-tinh-sua" class="form-control custom-select" required>
-								<option value="" disabled>Vui lòng chọn</option>
-								<option value="nam">Nam</option>
-								<option value="nu">Nữ</option>
-							</select>
-						</div>
-					</div>
-					<div class="row">
-						<div class="form-group col-sm-6">
-							<label for="tai-khoan-sua">Tài khoản <b class="text-danger">(*)</b></label>
-							<input type="text" id="tai-khoan-sua" class="form-control" disabled>
-						</div>
-						<div class="form-group col-sm-6">
-							<label for="mat-khau-sua">Mật khẩu</label>
-							<input type="text" id="mat-khau-sua" class="form-control" placeholder="Để trống nếu không thay đổi mật khẩu">
-						</div>
-					</div>
-					<div class="row">
-						<div class="form-group col-sm-6">
-							<label for="di-dong-sua">Di động</label>
-							<input type="tel" id="di-dong-sua" class="form-control">
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="trang-thai-sua">Trạng thái <b class="text-danger">(*)</b></label>
-						<select id="trang-thai-sua" class="form-control custom-select">
-							<option value="1">Hoạt động</option>
-							<option value="0">Ngừng hoạt động</option>
-						</select>
-					</div>
+            <div class="form-group col-sm-4">
+              <label for="ma-hoc-vien-sua">Mã học viên <b class="text-danger">(*)</b></label>
+              <input type="text" id="ma-hoc-vien-sua" class="form-control" required>
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="ho-ten-sua">Họ tên <b class="text-danger">(*)</b></label>
+              <input type="text" id="ho-ten-sua" class="form-control" required>
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="gioi-tinh-sua">Giới tính <b class="text-danger">(*)</b></label>
+              <select id="gioi-tinh-sua" class="form-control custom-select" required>
+                <option value="" disabled>Vui lòng chọn</option>
+                <option value="nam">Nam</option>
+                <option value="nu">Nữ</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-sm-4">
+              <label for="nam-sinh-sua">Năm sinh</label>
+              <input type="text" id="nam-sinh-sua" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="noi-sinh-sua">Nơi sinh </label>
+              <input type="text" id="noi-sinh-sua" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="di-dong-sua">Di động </label>
+              <input type="text" id="di-dong-sua" class="form-control">
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-sm-4">
+              <label for="chuc-vu-dang-sua">Chức vụ Đảng</label>
+              <input type="text" id="chuc-vu-dang-sua" class="form-control">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="chuc-vu-chinh-quyen-sua">Chức vụ Chính quyền</label>
+              <input type="text" id="chuc-vu-chinh-quyen-sua" class="form-control">
+            </div>
+            @php
+            $dsDanToc = DanTocController::getDsDanToc();
+            @endphp
+            <div class="form-group col-sm-4">
+              <label for="dan-toc-sua">Dân tộc <b class="text-danger">(*)</b></label>
+              <select id="dan-toc-sua" class="form-control custom-select" required>
+                <option value="" selected disabled>Vui lòng chọn</option>
+                @foreach($dsDanToc as $danToc)
+                <option value="{{$danToc->ma_dan_toc}}">{{$danToc->ten_dan_toc}}</option>
+                @endforeach
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            @php
+            $dsDonVi = DonViController::getDsDonVi();
+            @endphp
+            <div class="form-group col-sm-6">
+              <label for="don-vi-sua">Đơn vị <b class="text-danger">(*)</b></label>
+              <select id="don-vi-sua" class="form-control custom-select" required>
+                <option value="" selected disabled>Vui lòng chọn</option>
+                @foreach($dsDonVi as $donVi)
+                <option value="{{$donVi->ma_don_vi}}">{{$donVi->ten_don_vi}}</option>
+                @endforeach
+              </select>
+            </div>
+            @php
+            $dsKhoaHoc = KhoaHocController::getDsKhoaHoc();
+            @endphp
+            <div class="form-group col-sm-6">
+              <label for="khoa-hoc-sua">Khóa học <b class="text-danger">(*)</b></label>
+              <select id="khoa-hoc-sua" class="form-control custom-select" required>
+                <option value="0" selected>Chưa có khóa học</option>
+                @foreach($dsKhoaHoc as $khoaHoc)
+                <option value="{{$khoaHoc->ma_khoa_hoc}}">{{$khoaHoc->ten_khoa_hoc}}</option>
+                @endforeach
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-sm-4">
+              <label for="tai-khoan-sua">Tài khoản <b class="text-danger">(*)</b></label>
+              <input type="text" id="tai-khoan-sua" class="form-control" required>
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="mat-khau-sua">Mật khẩu</b></label>
+              <input type="text" id="mat-khau-sua" class="form-control" placeholder="Để trống nếu không thay đổi mật khẩu" value="">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="trang-thai-sua">Trạng thái <b class="text-danger">(*)</b></label>
+              <select id="trang-thai-sua" class="form-control custom-select">
+                <option value="0" selected>Chờ duyệt</option>
+                <option value="1">Chính thức</option>
+              </select>
+            </div>
+          </div>
 					<div class="modal-footer justify-content-between">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
 						<button type="submit" class="btn btn-primary btn-luu-sua">Lưu lại</button>
@@ -168,7 +231,7 @@ use App\Http\Controllers\KhoaHocController;
     $( '<a class="btn btn-primary btn-them-hoc-vien" style="width: 100px" data-toggle="modal" data-target="#modal-them-hoc-vien"><i class="fas fa-plus"></i> Thêm</a>' ).appendTo( "#table-hoc-vien_wrapper .col-md-6:eq(0)" );
     $( '<a class="btn btn-success btn-import-hoc-vien" style="width: 100px; margin-left: 5px" data-toggle="modal" data-target="#modal-import-hoc-vien"><i class="fas fa-file"></i> Import</a>' ).appendTo( "#table-hoc-vien_wrapper .col-md-6:eq(0)" );
 
-    $("#table-tai-khoan").on("click", ".btn-xoa-tai-khoan", function(){
+    $("#table-hoc-vien").on("click", ".btn-xoa-hoc-vien", function(){
     	var idTaiKhoan = $(this).attr('data-id');
     	Swal.fire({
     		title: 'Xác nhận xóa?',
@@ -182,7 +245,7 @@ use App\Http\Controllers\KhoaHocController;
     	}).then((result) => {
     		if (result.isConfirmed) {
     			$.ajax({
-    				url: '{{route("xoa-tai-khoan")}}',
+    				url: '{{route("xoa-hoc-vien")}}',
     				data: {
     					idTaiKhoan:idTaiKhoan
     				},
@@ -192,13 +255,13 @@ use App\Http\Controllers\KhoaHocController;
     				},
     				success: function(data){
     					if(data==true){
-    						toastr.success("Xóa tài khoản thành công.");
+    						toastr.success("Xóa học viên thành công.");
     						$.ajax({
-    							url: '{{route("load-danh-sach-tai-khoan")}}',
+    							url: '{{route("load-danh-sach-hoc-vien")}}',
     							type: "GET",
     							success: function(data){
-    								$('#div-danh-sach-tai-khoan').empty();
-    								$('#div-danh-sach-tai-khoan').html(data);
+    								$('#div-danh-sach-hoc-vien').empty();
+    								$('#div-danh-sach-hoc-vien').html(data);
     							}, 
     							error: function(err){       
     								toastr.error("Lỗi! Vui lòng thử lại.");
@@ -216,26 +279,34 @@ use App\Http\Controllers\KhoaHocController;
     	})
     });
 
-    $("#table-tai-khoan").on("click", ".btn-sua-tai-khoan", function(){
-    	$('#modal-sua-tai-khoan').find('form')[0].reset();
-    	var idTaiKhoan = $(this).attr('data-id');
+    $("#table-hoc-vien").on("click", ".btn-sua-hoc-vien", function(){
+    	$('#modal-sua-hoc-vien').find('form')[0].reset();
+    	var idUser = $(this).attr('data-id');
     	$.ajax({
-    		url: '{{route("load-tai-khoan-sua")}}',
+    		url: '{{route("load-hoc-vien-sua")}}',
     		data: {
-    			idTaiKhoan:idTaiKhoan
+    			idUser:idUser
     		},
     		type: "POST",
     		headers: {
     			'X-CSRF-Token': '{{ csrf_token() }}',
     		},
-    		success: function(taikhoan){
-    			$('#id-tai-khoan-sua').val(idTaiKhoan);
-    			$('#ho-ten-sua').val(taikhoan['hoten']);
-    			$('#gioi-tinh-sua').val(taikhoan['gioi_tinh']);
-    			$('#tai-khoan-sua').val(taikhoan['username']);
-    			$('#di-dong-sua').val(taikhoan['di_dong']);
-    			$('#nhom-quyen-sua').val(taikhoan['nhom_quyen']);
-    			$('#trang-thai-sua').val(taikhoan['state']);
+    		success: function(data){
+    			$('#id-tai-khoan-sua').val(data['taikhoan']['id']);
+    			$('#ma-hoc-vien-sua').val(data['hocvien']['ma_hoc_vien']);
+					$('#ho-ten-sua').val(data['taikhoan']['hoten']);
+					$('#gioi-tinh-sua').val(data['taikhoan']['gioi_tinh']);
+					$('#nam-sinh-sua').val(data['hocvien']['nam_sinh']);
+					$('#noi-sinh-sua').val(data['hocvien']['noi_sinh']);
+					$('#di-dong-sua').val(data['taikhoan']['di_dong']);
+					$('#chuc-vu-dang-sua').val(data['hocvien']['chuc_vu_dang']);
+					$('#chuc-vu-chinh-quyen-sua').val(data['hocvien']['chuc_vu_chinh_quyen']);
+					$('#dan-toc-sua').val(data['hocvien']['ma_dan_toc']);
+					$('#don-vi-sua').val(data['hocvien']['ma_don_vi']);
+					$('#khoa-hoc-sua').val(data['hocvien']['ma_khoa_hoc']);
+					$('#tai-khoan-sua').val(data['taikhoan']['username']);
+					$('#trang-thai-sua').val(data['hocvien']['state']);
+
     		}, 
     		error: function(err){       
     			toastr.error("Lỗi! Vui lòng thử lại.");
@@ -245,23 +316,39 @@ use App\Http\Controllers\KhoaHocController;
     });
 
     $('.btn-luu-sua').click(function(){
-    	var idTaiKhoanSua = $('#id-tai-khoan-sua').val();
-    	var hoTenSua = $('#ho-ten-sua').val();
-    	var matKhauSua = $('#mat-khau-sua').val();
-    	var gioiTinhSua = $('#gioi-tinh-sua').val();
-    	var diDongSua = $('#di-dong-sua').val();
-    	var nhomQuyenSua = $('#nhom-quyen-sua').val();
-    	var trangThaiSua = $('#trang-thai-sua').val();
+  		var idTaiKhoan = $('#id-tai-khoan-sua').val();
+			var maHocVien = $('#ma-hoc-vien-sua').val();
+			var hoTen = $('#ho-ten-sua').val();
+			var gioiTinh = $('#gioi-tinh-sua').val();
+			var namSinh = $('#nam-sinh-sua').val();
+			var noiSinh = $('#noi-sinh-sua').val();
+			var diDong = $('#di-dong-sua').val();
+			var chucVuDang = $('#chuc-vu-dang-sua').val();
+			var chucVuCQ = $('#chuc-vu-chinh-quyen-sua').val();
+			var idDanToc = $('#dan-toc-sua').val();
+			var idDonVi = $('#don-vi-sua').val();
+			var idKhoaHoc = $('#khoa-hoc-sua').val();
+			var userName = $('#tai-khoan-sua').val();
+			var matKhau = $('#mat-khau-sua').val();
+			var state = $('#trang-thai-sua').val();
     	$.ajax({
-    		url: '{{route("luu-tai-khoan-sua")}}',
+    		url: '{{route("luu-hoc-vien-sua")}}',
     		data: {
-    			idTaiKhoanSua:idTaiKhoanSua,
-    			hoTenSua:hoTenSua,
-    			matKhauSua:matKhauSua,
-    			gioiTinhSua:gioiTinhSua,
-    			diDongSua:diDongSua,
-    			nhomQuyenSua:nhomQuyenSua,
-    			trangThaiSua:trangThaiSua
+    			idTaiKhoan:idTaiKhoan,
+					maHocVien:maHocVien,
+					hoTen:hoTen,
+					gioiTinh:gioiTinh,
+					namSinh:namSinh,
+					noiSinh:noiSinh,
+					diDong:diDong,
+					chucVuDang:chucVuDang,
+					chucVuCQ:chucVuCQ,
+					idDanToc:idDanToc,
+					idDonVi:idDonVi,
+					idKhoaHoc:idKhoaHoc,
+					userName:userName,
+					matKhau:matKhau,
+					state:state
     		},
     		type: "POST",
     		headers: {
@@ -269,14 +356,14 @@ use App\Http\Controllers\KhoaHocController;
     		},
     		success: function(data){
     			if(data==true){
-    				toastr.success("Cập nhật thông tin tài khoản thành công."); 				
-            $('#modal-sua-tai-khoan').modal('hide');
+    				toastr.success("Cập nhật thông tin học viên thành công."); 				
+            $('#modal-sua-hoc-vien').modal('hide');
     				$.ajax({
-    					url: '{{route("load-danh-sach-tai-khoan")}}',
+    					url: '{{route("load-danh-sach-hoc-vien")}}',
     					type: "GET",
     					success: function(data){
-    						$('#div-danh-sach-tai-khoan').empty();
-    						$('#div-danh-sach-tai-khoan').html(data);
+    						$('#div-danh-sach-hoc-vien').empty();
+    						$('#div-danh-sach-hoc-vien').html(data);
     					}, 
     					error: function(err){       
     						toastr.error("Lỗi! Vui lòng thử lại.");
@@ -294,6 +381,11 @@ use App\Http\Controllers\KhoaHocController;
     			console.log(err);
     		}
     	})
+    });
+
+    $("#table-hoc-vien").on("click", ".btn-duyet-hoc-vien", function(){
+    	var idUsser = $(this).attr('data-id');
+    	alert(idUsser);
     });
     @endif
 </script>

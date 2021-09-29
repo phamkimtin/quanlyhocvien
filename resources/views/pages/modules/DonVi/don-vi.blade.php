@@ -23,6 +23,7 @@
 </div>
 <!-- /.card -->
 
+@if(in_array('edit_don_vi',session('quyen')))
 <!-- modal thêm đơn vị -->
 <div class="modal fade" id="modal-them-don-vi">
   <div class="modal-dialog">
@@ -62,6 +63,7 @@
     <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
+@endif
 
 <script>
   $(function () {
@@ -89,6 +91,7 @@
       }
     });
 
+    @if(in_array('edit_don_vi',session('quyen')))
     $('.btn-luu-them').click(function(){
       var maDonViThem = $('#ma-don-vi-them').val();
       var tenDonViThem = $('#ten-don-vi-them').val();
@@ -133,8 +136,8 @@
           }
         });
       }
-
     });
+    @endif
    
   });
 </script>
