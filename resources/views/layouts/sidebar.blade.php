@@ -1,7 +1,7 @@
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <!-- Brand Logo -->
-  <a href="index3.html" class="brand-link">
+  <a href="{{route('trang-chu')}}" class="brand-link">
     <img src="dist/img/logo-vnpt-app.jpg" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
     <span class="brand-text font-weight-light">TRƯỜNG CHÍNH TRỊ</span>
   </a>
@@ -47,6 +47,20 @@
               </a>
             </li>
             @endif
+            @if(in_array('view_khoa_hoc',session('quyen')))
+            <li class="nav-item">
+              <a href="{{route('khoa-hoc')}}" class="nav-link" id='menu-khoa-hoc'>
+                <i class="far fa-calendar-alt nav-icon"></i>
+                <p>Khóa học</p>
+              </a>
+            </li>
+            @endif           
+            <li class="nav-item">
+              <a href="{{route('404')}}" class="nav-link">
+                <i class="far fa-file-alt nav-icon"></i>
+                <p>Môn học</p>
+              </a>
+            </li>
           </ul>
         </li>
         <li class="nav-item menu-open">
@@ -66,20 +80,6 @@
               </a>
             </li>
             @endif
-            @if(in_array('view_khoa_hoc',session('quyen')))
-            <li class="nav-item">
-              <a href="{{route('khoa-hoc')}}" class="nav-link" id='menu-khoa-hoc'>
-                <i class="far fa-calendar-alt nav-icon"></i>
-                <p>Khóa học</p>
-              </a>
-            </li>
-            @endif
-            <li class="nav-item">
-              <a href="./index2.html" class="nav-link">
-                <i class="far fa-file-alt nav-icon"></i>
-                <p>Môn học</p>
-              </a>
-            </li>
             @if(in_array('view_dan_toc',session('quyen')))
             <li class="nav-item">
               <a href="{{route('dm-dan-toc')}}" class="nav-link" id="menu-dm-danh-toc">

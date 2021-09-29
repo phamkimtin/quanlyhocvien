@@ -122,4 +122,17 @@ class HocVienController extends Controller
 					->get();
 		return view('pages/modules/HocVien/danh-sach-hoc-vien', compact('dsUser'));
 	}
+
+	public function duyetHocVien(Request $request){
+		if(!session('login-state')) return redirect()->route('login');
+		$TaiKhoan = TaiKhoanModel::find($request->idUsser);
+		$TaiKhoan->state = 1;
+		$TaiKhoan->save();
+
+		$HocVien = HocVienModel::where('id_user','=',$request->idUsser)->first();
+		$HocVien->state = 1;
+		$HocVien->save();
+
+		return true;
+	}
 }

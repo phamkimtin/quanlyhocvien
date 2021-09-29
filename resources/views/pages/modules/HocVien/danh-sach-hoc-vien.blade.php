@@ -358,18 +358,40 @@ use App\Http\Controllers\KhoaHocController;
     			if(data==true){
     				toastr.success("Cập nhật thông tin học viên thành công."); 				
             $('#modal-sua-hoc-vien').modal('hide');
-    				$.ajax({
-    					url: '{{route("load-danh-sach-hoc-vien")}}',
-    					type: "GET",
-    					success: function(data){
-    						$('#div-danh-sach-hoc-vien').empty();
-    						$('#div-danh-sach-hoc-vien').html(data);
-    					}, 
-    					error: function(err){       
-    						toastr.error("Lỗi! Vui lòng thử lại.");
-    						console.log(err);
-    					}
-    				})
+            if($('.chon-khoa-hoc').val()!=-1){
+    					$.ajax({
+				        url: '{{route("load-hoc-vien-by-khoa-hoc")}}',
+				        data: {
+				          maKhoaHoc:$('.chon-khoa-hoc').val()
+				        },
+				        type: "POST",
+				        headers: {
+				          'X-CSRF-Token': '{{ csrf_token() }}',
+				        },
+				        success: function(data){
+				          toastr.success("Load dữ liệu thành công.");
+				          $('#div-danh-sach-hoc-vien').html(data);
+				        }, 
+				        error: function(err){       
+				          toastr.error("Lỗi! Vui lòng thử lại.");
+				          console.log(err);
+				        }
+				      });
+    				}
+    				else{
+	    				$.ajax({
+	    					url: '{{route("load-danh-sach-hoc-vien")}}',
+	    					type: "GET",
+	    					success: function(data){
+	    						$('#div-danh-sach-hoc-vien').empty();
+	    						$('#div-danh-sach-hoc-vien').html(data);
+	    					}, 
+	    					error: function(err){       
+	    						toastr.error("Lỗi! Vui lòng thử lại.");
+	    						console.log(err);
+	    					}
+	    				})
+	    			}
     			}
     			else{
     				toastr.error("Lỗi! Vui lòng thử lại.");
@@ -385,7 +407,59 @@ use App\Http\Controllers\KhoaHocController;
 
     $("#table-hoc-vien").on("click", ".btn-duyet-hoc-vien", function(){
     	var idUsser = $(this).attr('data-id');
-    	alert(idUsser);
+    	$.ajax({
+    		url: '{{route("duyet-hoc-vien")}}',
+    		data: {
+    			idUsser:idUsser
+    		},
+    		type: "POST",
+    		headers: {
+    			'X-CSRF-Token': '{{ csrf_token() }}',
+    		},
+    		success: function(data){
+    			if(data==true){
+    				toastr.success("Duyệt học viên thành công.");
+    				if($('.chon-khoa-hoc').val()!=-1){
+    					$.ajax({
+				        url: '{{route("load-hoc-vien-by-khoa-hoc")}}',
+				        data: {
+				          maKhoaHoc:$('.chon-khoa-hoc').val()
+				        },
+				        type: "POST",
+				        headers: {
+				          'X-CSRF-Token': '{{ csrf_token() }}',
+				        },
+				        success: function(data){
+				          toastr.success("Load dữ liệu thành công.");
+				          $('#div-danh-sach-hoc-vien').html(data);
+				        }, 
+				        error: function(err){       
+				          toastr.error("Lỗi! Vui lòng thử lại.");
+				          console.log(err);
+				        }
+				      });
+    				}
+    				else{
+	    				$.ajax({
+								url: '{{route("load-danh-sach-hoc-vien")}}',
+								type: "GET",
+								success: function(data){
+									$('#div-danh-sach-hoc-vien').empty();
+									$('#div-danh-sach-hoc-vien').html(data);
+								}, 
+								error: function(err){       
+									toastr.error("Lỗi! Vui lòng thử lại.");
+									console.log(err);
+								}
+							})
+	    			}
+    			}
+    		}, 
+    		error: function(err){       
+    			toastr.error("Lỗi! Vui lòng thử lại.");
+    			console.log(err);
+    		}
+    	})
     });
     @endif
 </script>

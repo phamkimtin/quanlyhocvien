@@ -33,3 +33,5 @@ Route::post('/load-hoc-vien-sua', [HocVienController::class, 'loadHocVienSua'])-
 Route::post('/luu-hoc-vien-sua', [HocVienController::class, 'luuHocVienSua'])->name('luu-hoc-vien-sua');
 
 Route::post('/load-hoc-vien-by-khoa-hoc', [HocVienController::class, 'loadHocVienByKhoaHoc'])->name('load-hoc-vien-by-khoa-hoc');
+
+Route::post('/duyet-hoc-vien', [HocVienController::class, 'duyetHocVien'])->name('duyet-hoc-vien');
