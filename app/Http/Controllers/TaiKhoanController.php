@@ -23,6 +23,8 @@ class TaiKhoanController extends Controller
 
 	public function themTaiKhoan(Request $request){
 		if(!session('login-state')) return redirect()->route('login');
+		$checkTaiKhoan = TaiKhoanModel::where('username','=',$request->taiKhoan)->count();
+    	if($checkTaiKhoan>0) return 'trung_username';
 		$TaiKhoan = new TaiKhoanModel();
 		$TaiKhoan->hoten = $request->hoTen;
 		$TaiKhoan->username = $request->taiKhoan;
@@ -53,10 +55,15 @@ class TaiKhoanController extends Controller
 		if(!session('login-state')) return redirect()->route('login');
 		try{
 			$TaiKhoan = TaiKhoanModel::find($request->idTaiKhoanSua);
+			if($TaiKhoan->username != $request->taiKhoanSua){
+				$checkTaiKhoan = TaiKhoanModel::where('username','=',$request->taiKhoanSua)->count();
+    			if($checkTaiKhoan>0) return 'trung_username';
+			}
 			$TaiKhoan->hoten = $request->hoTenSua;
 			if(!empty($request->matKhauSua)){
 				$TaiKhoan->password = base64_encode(md5($request->matKhauSua)).'z';
 			}
+			$TaiKhoan->username = $request->taiKhoanSua;
 			$TaiKhoan->gioi_tinh = $request->gioiTinhSua;
 			$TaiKhoan->hinh_anh = '';
 			$TaiKhoan->di_dong = $request->diDongSua;

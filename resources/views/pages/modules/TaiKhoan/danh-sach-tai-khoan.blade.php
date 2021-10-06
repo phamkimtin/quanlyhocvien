@@ -10,7 +10,7 @@
 			<th>Nhóm quyền</th>
 			<th>Trạng thái</th>
 			@if(in_array('edit_tai_khoan',session('quyen')))
-			<th>Chức năng</th>
+			<th>#</th>
 			@endif
 		</tr>
 	</thead>
@@ -34,7 +34,7 @@
 			@if(in_array('edit_tai_khoan',session('quyen')))
 			<td class="text-center">
 				<div class="btn-group">
-					<button type="button" class="btn btn-info dropdown-toggle dropdown-hover dropdown-icon btn-xs" data-toggle="dropdown">Hành động
+					<button type="button" class="btn btn-info dropdown-hover dropdown-icon btn-xs" data-toggle="dropdown"><i class="fa fa-cogs"></i>
 						<span class="sr-only">Toggle Dropdown</span>
 					</button>
 					<div class="dropdown-menu dropdown-menu-right" role="menu">
@@ -84,7 +84,7 @@
 					<div class="row">
 						<div class="form-group col-sm-6">
 							<label for="tai-khoan-sua">Tài khoản <b class="text-danger">(*)</b></label>
-							<input type="text" id="tai-khoan-sua" class="form-control" disabled>
+							<input type="text" id="tai-khoan-sua" class="form-control">
 						</div>
 						<div class="form-group col-sm-6">
 							<label for="mat-khau-sua">Mật khẩu</label>
@@ -133,6 +133,7 @@
       "responsive": true, 
       "lengthChange": false, 
       "autoWidth": false,
+      "stateSave": true,
       "language": {
         "lengthMenu": "Display _MENU_ records per page",
         "zeroRecords": "Không tìm thấy dữ liệu phù hợp",
@@ -231,6 +232,7 @@
     $('.btn-luu-sua').click(function(){
     	var idTaiKhoanSua = $('#id-tai-khoan-sua').val();
     	var hoTenSua = $('#ho-ten-sua').val();
+    	var taiKhoanSua = $('#tai-khoan-sua').val();
     	var matKhauSua = $('#mat-khau-sua').val();
     	var gioiTinhSua = $('#gioi-tinh-sua').val();
     	var diDongSua = $('#di-dong-sua').val();
@@ -241,6 +243,7 @@
     		data: {
     			idTaiKhoanSua:idTaiKhoanSua,
     			hoTenSua:hoTenSua,
+    			taiKhoanSua:taiKhoanSua,
     			matKhauSua:matKhauSua,
     			gioiTinhSua:gioiTinhSua,
     			diDongSua:diDongSua,
@@ -252,7 +255,10 @@
     			'X-CSRF-Token': '{{ csrf_token() }}',
     		},
     		success: function(data){
-    			if(data==true){
+  			 	if(data=='trung_username'){
+            toastr.warning("Tên đăng nhập này đã được sử dụng.");
+          }
+    			else if(data==true){
     				toastr.success("Cập nhật thông tin tài khoản thành công."); 				
             $('#modal-sua-tai-khoan').modal('hide');
     				$.ajax({

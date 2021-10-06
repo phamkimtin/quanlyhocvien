@@ -23,7 +23,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a href="{{route('trang-chu')}}" class="nav-link" id='menu-cham-diem'>
+          <a href="{{route('cham-diem')}}" class="nav-link" id='menu-cham-diem'>
             <i class="nav-icon fas fa-edit"></i>
             <p>
               Chấm điểm
@@ -54,13 +54,23 @@
                 <p>Khóa học</p>
               </a>
             </li>
-            @endif           
+            @endif    
+            @if(in_array('view_mon_hoc',session('quyen')))      
             <li class="nav-item">
-              <a href="{{route('404')}}" class="nav-link">
+              <a href="{{route('mon-hoc')}}" class="nav-link">
                 <i class="far fa-file-alt nav-icon"></i>
                 <p>Môn học</p>
               </a>
             </li>
+            @endif
+            @if(in_array('xep_khoa_hoc',session('quyen')))
+            <li class="nav-item">
+              <a href="{{route('xep-khoa-hoc')}}" class="nav-link" id='menu-xep-khoa-hoc'>
+                <i class="far fa-calendar-alt nav-icon"></i>
+                <p>Xếp khóa học</p>
+              </a>
+            </li>
+            @endif
           </ul>
         </li>
         <li class="nav-item menu-open">

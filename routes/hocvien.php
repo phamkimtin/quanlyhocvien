@@ -35,3 +35,9 @@ Route::post('/luu-hoc-vien-sua', [HocVienController::class, 'luuHocVienSua'])->n
 Route::post('/load-hoc-vien-by-khoa-hoc', [HocVienController::class, 'loadHocVienByKhoaHoc'])->name('load-hoc-vien-by-khoa-hoc');
 
 Route::post('/duyet-hoc-vien', [HocVienController::class, 'duyetHocVien'])->name('duyet-hoc-vien');
+
+Route::get('/xep-khoa-hoc', [HocVienController::class, 'xepKhoaHoc'])->name('xep-khoa-hoc');
+
+Route::post('/luu-xep-khoa-hoc', [HocVienController::class, 'luuXepKhoaHoc'])->name('luu-xep-khoa-hoc');
+
+Route::post('/get-danh-sach-hoc-vien', [HocVienController::class, 'getDsHv'])->name('get-danh-sach-hoc-vien');

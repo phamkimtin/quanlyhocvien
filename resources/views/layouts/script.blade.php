@@ -55,3 +55,5 @@
 <!-- InputMask -->
 <script src="plugins/moment/moment.min.js"></script>
 <script src="plugins/inputmask/jquery.inputmask.min.js"></script>
+<!-- Bootstrap4 Duallistbox -->
+<script src="plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>

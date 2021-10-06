@@ -89,4 +89,14 @@ class KhoaHocController extends Controller
 		}
 		return view('pages/modules/HocVien/ajax/get-khoa-hoc-by-nam-hoc', compact('dsKhoaHoc'));
 	}
+
+	public static function getKhoaHoc(Request $request){
+		if($request->namHoc==-1){
+			$dsKhoaHoc = KhoaHocModel::where('state','=',1)->get();
+		}
+		else{
+			$dsKhoaHoc = KhoaHocModel::where('state','=',1)->where('tu_nam','=',$request->namHoc)->get();
+		}
+		return view('pages/modules/KhoaHoc/ajax/get-khoa-hoc', compact('dsKhoaHoc'));
+	}
 }

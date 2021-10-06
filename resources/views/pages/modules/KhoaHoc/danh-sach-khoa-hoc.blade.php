@@ -1,14 +1,14 @@
 <table id="table-khoa-hoc" class="table table-bordered table-striped table-sm">
 	<thead>
 		<tr>
-			<th>STT</th>
-			<th>Mã khóa học</th>
-			<th>Tên khóa học</th>
-			<th>Từ năm</th>
-			<th>Đến năm</th>
-			<th>Trạng thái</th>
+			<th class="text-center">STT</th>
+			<th class="text-center">Mã khóa học</th>
+			<th class="text-center">Tên khóa học</th>
+			<th class="text-center">Từ năm</th>
+			<th class="text-center">Đến năm</th>
+			<th class="text-center">Trạng thái</th>
 			@if(in_array('edit_khoa_hoc',session('quyen')))
-			<th>Chức năng</th>
+			<th class="text-center">#</th>
 			@endif
 		</tr>
 	</thead>
@@ -16,7 +16,7 @@
 		@foreach($dsKhoaHoc as $index => $dsKH)
 		<tr>
 			<td class="text-center align-middle">{{$index+1}}</td>
-			<td class="align-middle">{{$dsKH->ma_khoa_hoc}}</td>
+			<td class="align-middle cell-khoa-hoc" data-id="{{$dsKH->ma_khoa_hoc}}" data-ten-khoa-hoc="{{$dsKH->ten_khoa_hoc}}" data-toggle="modal" data-target="#modal-danh-sach-hoc-vien">{{$dsKH->ma_khoa_hoc}}</td>
 			<td class="align-middle">{{$dsKH->ten_khoa_hoc}}</td>
 			<td class="text-center align-middle">{{$dsKH->tu_nam}}</td>
 			<td class="text-center align-middle">{{$dsKH->den_nam}}</td>
@@ -30,7 +30,7 @@
 			@if(in_array('edit_khoa_hoc',session('quyen')))
 			<td class="text-center">
 				<div class="btn-group">
-					<button type="button" class="btn btn-info dropdown-toggle dropdown-hover dropdown-icon btn-xs" data-toggle="dropdown">Hành động
+					<button type="button" class="btn btn-info dropdown-hover dropdown-icon btn-xs" data-toggle="dropdown"><i class="fa fa-cogs"></i>
 						<span class="sr-only">Toggle Dropdown</span>
 					</button>
 					<div class="dropdown-menu dropdown-menu-right" role="menu">
@@ -39,6 +39,9 @@
 						</a>
 						<a class="dropdown-item btn-xoa-khoa-hoc" data-id="{{$dsKH->id}}">
 							<i class="fas fa-trash"></i> Xóa
+						</a>
+						<a class="dropdown-item btn-xem-mon-hoc" data-id="{{$dsKH->id}}" data-toggle="modal" data-target="#modal-xem-mon-hoc" data-ten-khoa-hoc="{{$dsKH->ten_khoa_hoc}}">
+							<i class="fas fa-copy"></i> Xem môn học
 						</a>
 					</div>
 				</div>
@@ -102,11 +105,65 @@
 <!-- /.modal -->
 @endif
 
+<!-- modal xem ds học viên -->
+<div class="modal fade" id="modal-danh-sach-hoc-vien">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="tieu-de-danh-sach"></h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<table class="table table-bordered table-striped table-sm">
+					<thead>
+						<tr>
+							<th class="text-center">STT</th>
+							<th class="text-center">Mã học viên</th>
+							<th class="text-center">Tên học viên</th>
+							<th class="text-center">Giới tính</th>
+							<th class="text-center">SĐT</th>
+							<th class="text-center">Đơn vị</th>
+						</tr>
+					</thead>
+					<tbody id="div-dshv">
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<!-- modal xem môn học -->
+<div class="modal fade" id="modal-xem-mon-hoc">
+	<div class="modal-dialog modal-xl">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="tieu-de-khoa-hoc"></h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div id="div-xem-mon-hoc"></div>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
 <script type="text/javascript">
 	$("#table-khoa-hoc").DataTable({
       "responsive": true, 
       "lengthChange": false, 
       "autoWidth": false,
+      "stateSave": true,
       "language": {
         "lengthMenu": "Display _MENU_ records per page",
         "zeroRecords": "Không tìm thấy dữ liệu phù hợp",
@@ -254,5 +311,49 @@
     	})
     });
     @endif
+    $("#table-khoa-hoc").on("click", ".cell-khoa-hoc", function(){
+    	$('#tieu-de-danh-sach').html($(this).attr('data-ten-khoa-hoc'));
+    	var maKhoaHoc = $(this).attr('data-id');
+    	$('#selected-khoa-hoc').val($(this).attr('data-id'));
+    	$.ajax({
+          url: '{{route("get-danh-sach-hoc-vien")}}',
+          data: {
+            maKhoaHoc:maKhoaHoc
+          },
+          type: "POST",
+          headers: {
+            'X-CSRF-Token': '{{ csrf_token() }}',
+          },
+          success: function(data){
+          	$('#div-dshv').empty();
+          	$('#div-dshv').html(data);
+          }, 
+          error: function(err){       
+            toastr.error("Lỗi! Vui lòng thử lại.");
+            console.log(err);
+          }
+        });
+    });
 
+    $("#table-khoa-hoc").on("click", ".btn-xem-mon-hoc", function(){
+    	$('#tieu-de-khoa-hoc').html($(this).attr('data-ten-khoa-hoc'));
+    	var idKhoaHoc = $(this).attr('data-id');
+    	$.ajax({
+        url: '{{route("xep-mon-hoc")}}',
+        data: {
+          idKhoaHoc:idKhoaHoc
+        },
+        type: "POST",
+        headers: {
+          'X-CSRF-Token': '{{ csrf_token() }}',
+        },
+        success: function(data){
+        	$('#div-xem-mon-hoc').empty().html(data);
+        }, 
+        error: function(err){       
+          toastr.error("Lỗi! Vui lòng thử lại.");
+          console.log(err);
+        }
+      });
+    });
 </script>

@@ -210,6 +210,7 @@ use App\Http\Controllers\KhoaHocController;
       "lengthChange": false, 
       "autoWidth": false,
       "pageLength": 50,
+      "stateSave": true,
       "ordering": false,
       "language": {
         "lengthMenu": "Display _MENU_ records per page",
@@ -355,7 +356,10 @@ use App\Http\Controllers\KhoaHocController;
     			'X-CSRF-Token': '{{ csrf_token() }}',
     		},
     		success: function(data){
-    			if(data==true){
+    			if(data=='trung_username'){
+            toastr.warning("Tên đăng nhập này đã được sử dụng.");
+          }
+    			else if(data==true){
     				toastr.success("Cập nhật thông tin học viên thành công."); 				
             $('#modal-sua-hoc-vien').modal('hide');
             if($('.chon-khoa-hoc').val()!=-1){
@@ -369,7 +373,7 @@ use App\Http\Controllers\KhoaHocController;
 				          'X-CSRF-Token': '{{ csrf_token() }}',
 				        },
 				        success: function(data){
-				          toastr.success("Load dữ liệu thành công.");
+				          // toastr.success("Load dữ liệu thành công.");
 				          $('#div-danh-sach-hoc-vien').html(data);
 				        }, 
 				        error: function(err){       

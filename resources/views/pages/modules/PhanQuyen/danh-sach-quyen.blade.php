@@ -5,6 +5,7 @@
       <th>Module</th>
       <th>Xem</th>
       <th>Sửa/Xóa</th>
+      <th>Xếp khóa học</th>
     </tr>
   </thead>
   <tbody>
@@ -24,6 +25,7 @@
           </label>
         </div>
       </td>
+      <td></td>
     </tr>
     <tr>
       <td>Học viên</td>
@@ -41,6 +43,7 @@
           </label>
         </div>
       </td>
+      <td></td>
     </tr>
     <tr>
       <td>Khóa học</td>
@@ -55,6 +58,13 @@
         <div class="icheck-primary d-inline">
           <input class="checkbox-quyen" type="checkbox" id="edit_khoa_hoc" @if (NhomQuyenController::checkQuyenNhomQuyen($nhomQuyen,'edit_khoa_hoc'))==1 echo checked='checked'; @endif>
           <label for="edit_khoa_hoc">
+          </label>
+        </div>
+      </td>
+      <td>
+        <div class="icheck-primary d-inline">
+          <input class="checkbox-quyen" type="checkbox" id="xep_khoa_hoc" @if (NhomQuyenController::checkQuyenNhomQuyen($nhomQuyen,'xep_khoa_hoc'))==1 echo checked='checked'; @endif>
+          <label for="xep_khoa_hoc">
           </label>
         </div>
       </td>
@@ -75,6 +85,7 @@
           </label>
         </div>
       </td>
+      <td></td>
     </tr>
     <tr>
       <td>Dân tộc</td>
@@ -92,6 +103,7 @@
           </label>
         </div>
       </td>
+      <td></td>
     </tr>
     <tr>
       <td>Đơn vị</td>
@@ -109,6 +121,7 @@
           </label>
         </div>
       </td>
+      <td></td>
     </tr>
   </tbody>
 </table>

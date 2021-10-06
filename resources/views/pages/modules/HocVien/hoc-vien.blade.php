@@ -243,8 +243,11 @@ use App\Http\Controllers\KhoaHocController;
           'X-CSRF-Token': '{{ csrf_token() }}',
         },
         success: function(data){
-          if(data==true){
-            toastr.success("Thêm đơn vị thành công.");
+          if(data=='trung_username'){
+            toastr.warning("Tên đăng nhập này đã được sử dụng.");
+          }
+          else if(data==true){
+            toastr.success("Thêm học viên thành công.");
             $('#modal-them-hoc-vien').find('form')[0].reset();
             $('#modal-them-hoc-vien').modal('hide');
             $.ajax({

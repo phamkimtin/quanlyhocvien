@@ -89,10 +89,12 @@
 @endif
 
 <script type="text/javascript">
-	$("#table-dan-toc").DataTable({
+	var table = $("#table-dan-toc").DataTable({
 		"responsive": true, 
 		"lengthChange": false, 
 		"autoWidth": false,
+		"pageLength": 20,
+		"stateSave": true,
 		"language": {
 			"lengthMenu": "Display _MENU_ records per page",
 			"zeroRecords": "Không tìm thấy dữ liệu phù hợp",

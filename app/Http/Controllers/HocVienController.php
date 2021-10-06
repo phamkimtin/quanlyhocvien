@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Session;
 use App\Models\HocVienModel;
 use App\Models\TaiKhoanModel;
@@ -11,14 +12,19 @@ use DB;
 class HocVienController extends Controller
 {
 	public function getAllHocVien(Request $request){
-		$dsUser = TaiKhoanModel::where('nhom-quyen','=','hoc_vien');
+		$dsUser = TaiKhoanModel::where('nhom_quyen','=','hoc_vien');
 		return view('pages/modules/HocVien/hoc-vien', compact('dsUser'));
 	}
 
 	public function loadDanhSachHocVien(Request $request){
 		if(!session('login-state')) return redirect()->route('login');
 		if(!in_array('view_hoc_vien',session('quyen'))) return redirect()->route('404');
-		$dsUser = TaiKhoanModel::where('nhom_quyen','=','hoc_vien')->get();
+		// $dsUser = TaiKhoanModel::where('nhom_quyen','=','hoc_vien')->get();
+		$dsUser = DB::table('users')
+			->select("*",\DB::raw("SUBSTRING_INDEX(hoten, ' ', -1) as ten"))
+			->where('nhom_quyen','=','hoc_vien')
+			->orderBy('ten','ASC')
+    		->get();
 		return view('pages/modules/HocVien/danh-sach-hoc-vien', compact('dsUser'));
 	}
 
@@ -29,6 +35,9 @@ class HocVienController extends Controller
 
     public function themHocVien(Request $request){
     	if(!session('login-state')) return redirect()->route('login');
+    	$checkTaiKhoan = TaiKhoanModel::where('username','=',$request->userName)->count();
+    	if($checkTaiKhoan>0) return 'trung_username';
+
     	$TaiKhoan = new TaiKhoanModel();
     	$TaiKhoan->hoten = $request->hoTen;
     	$TaiKhoan->username = $request->userName;
@@ -71,6 +80,10 @@ class HocVienController extends Controller
 		if(!session('login-state')) return redirect()->route('login');
 		try{
 			$TaiKhoan = TaiKhoanModel::find($request->idTaiKhoan);
+			if($TaiKhoan->username != $request->userName){
+				$checkTaiKhoan = TaiKhoanModel::where('username','=',$request->userName)->count();
+    			if($checkTaiKhoan>0) return 'trung_username';
+			}
 			$TaiKhoan->hoten = $request->hoTen;
 			$TaiKhoan->username = $request->userName;
 			if($request->matKhau!=""){		
@@ -115,10 +128,11 @@ class HocVienController extends Controller
 	public function loadHocVienByKhoaHoc(Request $request){
 		if(!session('login-state')) return redirect()->route('login');
 		$dsUser = DB::table('users')
-					->select('users.*')
+					->select('users.*',\DB::raw("SUBSTRING_INDEX(users.hoten, ' ', -1) as ten"))
 					->join('hoc_vien','hoc_vien.id_user','=','users.id')
 					->where('users.nhom_quyen','hoc_vien')
 					->where('hoc_vien.ma_khoa_hoc',$request->maKhoaHoc)
+					->orderBy('ten','ASC')
 					->get();
 		return view('pages/modules/HocVien/danh-sach-hoc-vien', compact('dsUser'));
 	}
@@ -134,5 +148,48 @@ class HocVienController extends Controller
 		$HocVien->save();
 
 		return true;
+	}
+
+	public function xepKhoaHoc(){
+		if(!session('login-state')) return redirect()->route('login');
+		if(!in_array('xep_khoa_hoc',session('quyen'))) return redirect()->route('404');
+		Session::put('active-menu', 'menu-xep-khoa-hoc');
+    	Session::put('parent-active-menu', 'menu-quan-ly');
+		$dsHocVien = DB::table('users')
+					->select('*',\DB::raw("SUBSTRING_INDEX(users.hoten, ' ', -1) as ten"))
+					->join('hoc_vien','hoc_vien.id_user','=','users.id')
+					->join('dm_don_vi','hoc_vien.ma_don_vi','=','dm_don_vi.ma_don_vi')
+					->where('users.nhom_quyen','hoc_vien')
+					->where('hoc_vien.ma_khoa_hoc','0')
+					->orderBy('hoc_vien.ma_don_vi','ASC')
+					->orderBy('ten','ASC')
+					->get();
+		return view('pages/modules/KhoaHoc/xep-khoa-hoc', compact('dsHocVien'));
+	}
+
+	public function luuXepKhoaHoc(Request $request){
+		if(!session('login-state')) return redirect()->route('login');
+		$dsHocVien = $request->dsHocVien;
+		foreach($dsHocVien as $hocVien){
+			$HocVien = HocVienModel::where('id_user','=',$hocVien)->first();
+			$HocVien->ma_khoa_hoc = $request->maKhoaHoc;
+			$HocVien->save();
+		}
+		return true;
+	}
+
+	public function getDsHv(Request $request){
+		if(!session('login-state')) return redirect()->route('login');
+		$maKhoaHoc = $request->maKhoaHoc;
+		$dsHocVien = DB::table('users')
+					->select('*',\DB::raw("SUBSTRING_INDEX(users.hoten, ' ', -1) as ten"))
+					->join('hoc_vien','hoc_vien.id_user','=','users.id')
+					->join('dm_don_vi','hoc_vien.ma_don_vi','=','dm_don_vi.ma_don_vi')
+					->where('users.nhom_quyen','hoc_vien')
+					->where('hoc_vien.ma_khoa_hoc',$request->maKhoaHoc)
+					->orderBy('hoc_vien.ma_don_vi','ASC')
+					->orderBy('ten','ASC')
+					->get();
+		return view('pages/modules/KhoaHoc/ajax/get-danh-sach-hoc-vien', compact('dsHocVien'));
 	}
 }

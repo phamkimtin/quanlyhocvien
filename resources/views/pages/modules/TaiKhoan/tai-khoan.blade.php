@@ -155,7 +155,10 @@
             'X-CSRF-Token': '{{ csrf_token() }}',
           },
           success: function(data){
-            if(data==true){
+            if(data=='trung_username'){
+              toastr.warning("Tên đăng nhập này đã được sử dụng.");
+            }
+            else if(data==true){
               toastr.success("Thêm tài khoản thành công.");
               $('#modal-them-tai-khoan').find('form')[0].reset();
               $('#modal-them-tai-khoan').modal('hide');

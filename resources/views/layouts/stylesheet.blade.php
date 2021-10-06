@@ -26,3 +26,5 @@
 <link rel="stylesheet" href="plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
 <!-- Toastr -->
 <link rel="stylesheet" href="plugins/toastr/toastr.min.css">
+<!-- Bootstrap4 Duallistbox -->
+<link rel="stylesheet" href="plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
