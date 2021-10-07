@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Cache;
 use Session;
 use App\Models\HocVienModel;
 use App\Models\TaiKhoanModel;
+use App\Models\KhoaHocModel;
 use DB;
 
 class HocVienController extends Controller
@@ -191,5 +192,52 @@ class HocVienController extends Controller
 					->orderBy('ten','ASC')
 					->get();
 		return view('pages/modules/KhoaHoc/ajax/get-danh-sach-hoc-vien', compact('dsHocVien'));
+	}
+
+	public function xepHocVien(Request $request){
+		if(!session('login-state')) return redirect()->route('login');
+		// if(!in_array('xep_khoa_hoc',session('quyen'))) return redirect()->route('404');
+		$idKhoaHoc = $request->idKhoaHoc;
+		$maKhoaHoc = KhoaHocModel::find($request->idKhoaHoc)->ma_khoa_hoc;
+		$dsHocVien = DB::table('users')
+					->select('*',\DB::raw("SUBSTRING_INDEX(users.hoten, ' ', -1) as ten"))
+					->join('hoc_vien','hoc_vien.id_user','=','users.id')
+					->join('dm_don_vi','hoc_vien.ma_don_vi','=','dm_don_vi.ma_don_vi')
+					->where([
+	                    ['users.nhom_quyen', '=', 'hoc_vien'],
+	                    ['hoc_vien.ma_khoa_hoc', '=', '0'],
+	                ])
+					->orderBy('hoc_vien.ma_don_vi','ASC')
+					->orderBy('ten','ASC')
+					->get();
+		$dsHocVienTrongKhoa = DB::table('users')
+					->select('*',\DB::raw("SUBSTRING_INDEX(users.hoten, ' ', -1) as ten"))
+					->join('hoc_vien','hoc_vien.id_user','=','users.id')
+					->join('dm_don_vi','hoc_vien.ma_don_vi','=','dm_don_vi.ma_don_vi')
+					->where([
+	                    ['users.nhom_quyen', '=', 'hoc_vien'],
+	                    ['hoc_vien.ma_khoa_hoc', '=', $maKhoaHoc],
+	                ])
+					->orderBy('hoc_vien.ma_don_vi','ASC')
+					->orderBy('ten','ASC')
+					->get();
+		return view('pages/modules/KhoaHoc/xep-hoc-vien', compact('dsHocVien','idKhoaHoc','dsHocVienTrongKhoa'));
+	}
+
+	public function luuXepHocVien(Request $request){
+		if(!session('login-state')) return redirect()->route('login');
+		$dsHocVien = $request->dsHocVien;
+		$maKhoaHoc = KhoaHocModel::find($request->idKhoaHoc)->ma_khoa_hoc;
+		$HocVienTrongKhoa = HocVienModel::where('ma_khoa_hoc','=',$maKhoaHoc)->get();
+		foreach($HocVienTrongKhoa as $hvTK){
+			$hvTK->ma_khoa_hoc = 0;
+			$hvTK->save();
+		}
+		foreach($dsHocVien as $hocVien){
+			$HocVien = HocVienModel::where('id_user','=',$hocVien)->first();
+			$HocVien->ma_khoa_hoc = $maKhoaHoc;
+			$HocVien->save();
+		}
+		return true;
 	}
 }

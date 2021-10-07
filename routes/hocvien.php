@@ -41,3 +41,7 @@ Route::get('/xep-khoa-hoc', [HocVienController::class, 'xepKhoaHoc'])->name('xep
 Route::post('/luu-xep-khoa-hoc', [HocVienController::class, 'luuXepKhoaHoc'])->name('luu-xep-khoa-hoc');
 
 Route::post('/get-danh-sach-hoc-vien', [HocVienController::class, 'getDsHv'])->name('get-danh-sach-hoc-vien');
+
+Route::post('/xep-hoc-vien', [HocVienController::class, 'xepHocVien'])->name('xep-hoc-vien');
+
+Route::post('/luu-xep-hoc-vien', [HocVienController::class, 'luuXepHocVien'])->name('luu-xep-hoc-vien');

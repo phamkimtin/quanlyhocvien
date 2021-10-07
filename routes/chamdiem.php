@@ -25,3 +25,7 @@ Route::get('/cham-diem', function () {
 Route::post('/load-danh-sach-cham-diem', [KetQuaController::class, 'loadDanhSachChamDiem'])->name('load-danh-sach-cham-diem');
 
 Route::post('/get-khoa-hoc-cham-diem', [KetQuaController::class, 'getKhoaHoc'])->name('get-khoa-hoc-cham-diem');
+
+Route::post('/luu-cham-diem', [KetQuaController::class, 'luuChamDiem'])->name('luu-cham-diem');
+
+Route::post('/tim-hoc-vien', [KetQuaController::class, 'timHocVien'])->name('tim-hoc-vien');

@@ -43,6 +43,9 @@
 						<a class="dropdown-item btn-xem-mon-hoc" data-id="{{$dsKH->id}}" data-toggle="modal" data-target="#modal-xem-mon-hoc" data-ten-khoa-hoc="{{$dsKH->ten_khoa_hoc}}">
 							<i class="fas fa-copy"></i> Xem môn học
 						</a>
+						<a class="dropdown-item btn-xem-hoc-vien" data-id="{{$dsKH->id}}" data-toggle="modal" data-target="#modal-xem-hoc-vien" data-ten-khoa-hoc="{{$dsKH->ten_khoa_hoc}}">
+							<i class="fas fa-copy"></i> Xếp học viên
+						</a>
 					</div>
 				</div>
 			</td>
@@ -150,6 +153,26 @@
 			</div>
 			<div class="modal-body">
 				<div id="div-xem-mon-hoc"></div>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<!-- modal thêm/xóa học viên -->
+<div class="modal fade" id="modal-xem-hoc-vien">
+	<div class="modal-dialog modal-xl">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="tieu-de-khoa-hoc-hv"></h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div id="div-xem-hoc-vien"></div>
 			</div>
 		</div>
 		<!-- /.modal-content -->
@@ -349,6 +372,28 @@
         },
         success: function(data){
         	$('#div-xem-mon-hoc').empty().html(data);
+        }, 
+        error: function(err){       
+          toastr.error("Lỗi! Vui lòng thử lại.");
+          console.log(err);
+        }
+      });
+    });
+
+    $("#table-khoa-hoc").on("click", ".btn-xem-hoc-vien", function(){
+    	$('#tieu-de-khoa-hoc-hv').html($(this).attr('data-ten-khoa-hoc'));
+    	var idKhoaHoc = $(this).attr('data-id');
+    	$.ajax({
+        url: '{{route("xep-hoc-vien")}}',
+        data: {
+          idKhoaHoc:idKhoaHoc
+        },
+        type: "POST",
+        headers: {
+          'X-CSRF-Token': '{{ csrf_token() }}',
+        },
+        success: function(data){
+        	$('#div-xem-hoc-vien').empty().html(data);
         }, 
         error: function(err){       
           toastr.error("Lỗi! Vui lòng thử lại.");

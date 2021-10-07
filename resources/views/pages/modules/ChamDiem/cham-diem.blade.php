@@ -81,7 +81,7 @@ use App\Http\Controllers\KhoaHocController;
         headers: {
           'X-CSRF-Token': '{{ csrf_token() }}',
         },
-        success: function(data){     
+        success: function(data){  
           $('#chon-khoa-hoc').children().remove().end().append(data);
         }, 
         error: function(err){       
@@ -102,7 +102,34 @@ use App\Http\Controllers\KhoaHocController;
         headers: {
           'X-CSRF-Token': '{{ csrf_token() }}',
         },
-        success: function(data){     
+        success: function(data){ 
+          $('#div-danh-sach-hoc-vien').empty().html(data);
+        }, 
+        error: function(err){       
+          toastr.error("Lỗi! Vui lòng thử lại.");
+          console.log(err);
+        }
+      });
+    });
+
+    $('.btn-tim').on('click', function(){
+      var string = $('.tim-hoc-vien').val();
+      var idKhoaHoc = $('.chon-khoa-hoc').val();
+      if(!idKhoaHoc){
+        toastr.warning("Vui lòng chọn khóa học.");
+        return;
+      }
+      $.ajax({
+        url: '{{route("tim-hoc-vien")}}',
+        data: {
+          idKhoaHoc:idKhoaHoc,
+          string:string
+        },
+        type: "POST",
+        headers: {
+          'X-CSRF-Token': '{{ csrf_token() }}',
+        },
+        success: function(data){ 
           $('#div-danh-sach-hoc-vien').empty().html(data);
         }, 
         error: function(err){       

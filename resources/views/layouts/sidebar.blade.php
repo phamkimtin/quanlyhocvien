@@ -32,7 +32,7 @@
         </li>
         <li class="nav-item menu-open">
           <a href="#" class="nav-link" id="menu-quan-ly">
-            <i class="nav-icon fas fa-list-alt"></i>
+            <i class="nav-icon fas fa-book"></i>
             <p>
               Quản lý
               <i class="right fas fa-angle-left"></i>
@@ -58,7 +58,7 @@
             @if(in_array('view_mon_hoc',session('quyen')))      
             <li class="nav-item">
               <a href="{{route('mon-hoc')}}" class="nav-link">
-                <i class="far fa-file-alt nav-icon"></i>
+                <i class="fas fa-book-open nav-icon"></i>
                 <p>Môn học</p>
               </a>
             </li>
