@@ -17,8 +17,10 @@ use App\Http\Controllers\HocVienController;
 Route::get('/hoc-vien', function () {
     if(!session('login-state')) return redirect()->route('login');
     if(!in_array('view_hoc_vien',session('quyen'))) return redirect()->route('404');
-    Session::put('active-menu', 'menu-hoc-vien');
-    Session::put('parent-active-menu', 'menu-quan-ly');
+    session([
+        'active-menu' => 'menu-hoc-vien',
+        'parent-active-menu' => 'menu-quan-ly'
+    ]);
     return view('pages/modules/HocVien/hoc-vien');
 })->name('hoc-vien');
 

@@ -17,8 +17,10 @@ use App\Http\Controllers\MonHocController;
 Route::get('/mon-hoc', function () {
     if(!session('login-state')) return redirect()->route('login');
     if(!in_array('view_mon_hoc',session('quyen'))) return redirect()->route('404');
-    Session::put('active-menu', 'menu-mon-hoc');
-    Session::put('parent-active-menu', 'menu-quan-ly');
+    session([
+        "active-menu" => "menu-mon-hoc",
+        "parent-active-menu" => "menu-quan-ly"
+    ]);
     return view('pages/modules/MonHoc/mon-hoc');
 })->name('mon-hoc');
 

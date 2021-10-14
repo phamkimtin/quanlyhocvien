@@ -12,8 +12,10 @@ class NhomQuyenController extends Controller
 	public function loadPhanNhomQuyen(Request $request){
 		if(!session('login-state')) return redirect()->route('login');
 		if(session('nhom-quyen')!='admin') return redirect()->route('404');
-	    Session::put('active-menu', 'menu-phan-nhom-quyen');
-	    Session::put('parent-active-menu', 'menu-phan-quyen');
+        session([
+            'active-menu' => 'menu-phan-nhom-quyen',
+            'parent-active-menu' => 'menu-phan-quyen'
+        ]);
 		$dsNhomQuyen = NhomQuyenModel::getAll();
 		return view('pages/modules/PhanQuyen/phan-nhom-quyen', compact('dsNhomQuyen'));
 	}
@@ -26,7 +28,7 @@ class NhomQuyenController extends Controller
 			QuyenNhomQuyenModel::where('ma_nhom_quyen','=',$nhomQuyen)->delete();
 			return true;
 		}
-		else if(count($danhSachQuyen)>0){	
+		else if(count($danhSachQuyen)>0){
 			QuyenNhomQuyenModel::where('ma_nhom_quyen','=',$nhomQuyen)->delete();
 			foreach($danhSachQuyen as $index => $value){
 				$QuyenNhomQuyen = new QuyenNhomQuyenModel();

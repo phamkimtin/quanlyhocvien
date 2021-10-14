@@ -19,8 +19,10 @@ Route::get('/phan-nhom-quyen', [NhomQuyenController::class, 'loadPhanNhomQuyen']
 Route::get('/phan-quyen-user', function () {
     if(!session('login-state')) return redirect()->route('login');
     if(session('nhom-quyen')!='admin') return redirect()->route('404');
-    Session::put('active-menu', 'menu-phan-quyen-user');
-    Session::put('parent-active-menu', 'menu-phan-quyen');
+    session([
+        'active-menu' => 'menu-phan-quyen-user',
+        'parent-active-menu' => 'menu-phan-quyen'
+    ]);
     return view('pages/modules/PhanQuyen/phan-quyen-user');
 })->name('phan-quyen-user');
 

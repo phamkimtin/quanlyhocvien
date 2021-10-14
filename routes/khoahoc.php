@@ -17,8 +17,10 @@ use App\Http\Controllers\KhoaHocController;
 Route::get('/khoa-hoc', function () {
     if(!session('login-state')) return redirect()->route('login');
     if(!in_array('view_khoa_hoc',session('quyen'))) return redirect()->route('404');
-    Session::put('active-menu', 'menu-khoa-hoc');
-    Session::put('parent-active-menu', 'menu-quan-ly');
+    session([
+        'active-menu' => 'menu-khoa-hoc',
+        'parent-active-menu' => 'menu-quan-ly'
+    ]);
     return view('pages/modules/KhoaHoc/khoa-hoc');
 })->name('khoa-hoc');
 

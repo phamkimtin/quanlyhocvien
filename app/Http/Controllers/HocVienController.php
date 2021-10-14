@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use Session;
 use App\Models\HocVienModel;
 use App\Models\TaiKhoanModel;
 use App\Models\KhoaHocModel;
-use DB;
 
 class HocVienController extends Controller
 {
@@ -22,7 +22,7 @@ class HocVienController extends Controller
 		if(!in_array('view_hoc_vien',session('quyen'))) return redirect()->route('404');
 		// $dsUser = TaiKhoanModel::where('nhom_quyen','=','hoc_vien')->get();
 		$dsUser = DB::table('users')
-			->select("*",\DB::raw("SUBSTRING_INDEX(hoten, ' ', -1) as ten"))
+			->select("*",DB::raw("SUBSTRING_INDEX(hoten, ' ', -1) as ten"))
 			->where('nhom_quyen','=','hoc_vien')
 			->orderBy('ten','ASC')
     		->get();
@@ -66,7 +66,7 @@ class HocVienController extends Controller
 
     	return true;
     }
-	
+
 	public function loadHocVienSua(Request $request){
 		if(!session('login-state')) return redirect()->route('login');
 		$TaiKhoan = TaiKhoanModel::find($request->idUser);
@@ -87,7 +87,7 @@ class HocVienController extends Controller
 			}
 			$TaiKhoan->hoten = $request->hoTen;
 			$TaiKhoan->username = $request->userName;
-			if($request->matKhau!=""){		
+			if($request->matKhau!=""){
 				$TaiKhoan->password = base64_encode(md5($request->matKhau)).'z';;
 			}
 			$TaiKhoan->gioi_tinh = $request->gioiTinh;
@@ -129,7 +129,7 @@ class HocVienController extends Controller
 	public function loadHocVienByKhoaHoc(Request $request){
 		if(!session('login-state')) return redirect()->route('login');
 		$dsUser = DB::table('users')
-					->select('users.*',\DB::raw("SUBSTRING_INDEX(users.hoten, ' ', -1) as ten"))
+					->select('users.*',DB::raw("SUBSTRING_INDEX(users.hoten, ' ', -1) as ten"))
 					->join('hoc_vien','hoc_vien.id_user','=','users.id')
 					->where('users.nhom_quyen','hoc_vien')
 					->where('hoc_vien.ma_khoa_hoc',$request->maKhoaHoc)
@@ -154,10 +154,12 @@ class HocVienController extends Controller
 	public function xepKhoaHoc(){
 		if(!session('login-state')) return redirect()->route('login');
 		if(!in_array('xep_khoa_hoc',session('quyen'))) return redirect()->route('404');
-		Session::put('active-menu', 'menu-xep-khoa-hoc');
-    	Session::put('parent-active-menu', 'menu-quan-ly');
+        session([
+            'active-menu' => 'menu-xep-khoa-hoc',
+            'parent-active-menu' => 'menu-quan-ly'
+        ]);
 		$dsHocVien = DB::table('users')
-					->select('*',\DB::raw("SUBSTRING_INDEX(users.hoten, ' ', -1) as ten"))
+					->select('*',DB::raw("SUBSTRING_INDEX(users.hoten, ' ', -1) as ten"))
 					->join('hoc_vien','hoc_vien.id_user','=','users.id')
 					->join('dm_don_vi','hoc_vien.ma_don_vi','=','dm_don_vi.ma_don_vi')
 					->where('users.nhom_quyen','hoc_vien')
@@ -183,7 +185,7 @@ class HocVienController extends Controller
 		if(!session('login-state')) return redirect()->route('login');
 		$maKhoaHoc = $request->maKhoaHoc;
 		$dsHocVien = DB::table('users')
-					->select('*',\DB::raw("SUBSTRING_INDEX(users.hoten, ' ', -1) as ten"))
+					->select('*',DB::raw("SUBSTRING_INDEX(users.hoten, ' ', -1) as ten"))
 					->join('hoc_vien','hoc_vien.id_user','=','users.id')
 					->join('dm_don_vi','hoc_vien.ma_don_vi','=','dm_don_vi.ma_don_vi')
 					->where('users.nhom_quyen','hoc_vien')
@@ -200,7 +202,7 @@ class HocVienController extends Controller
 		$idKhoaHoc = $request->idKhoaHoc;
 		$maKhoaHoc = KhoaHocModel::find($request->idKhoaHoc)->ma_khoa_hoc;
 		$dsHocVien = DB::table('users')
-					->select('*',\DB::raw("SUBSTRING_INDEX(users.hoten, ' ', -1) as ten"))
+					->select('*',DB::raw("SUBSTRING_INDEX(users.hoten, ' ', -1) as ten"))
 					->join('hoc_vien','hoc_vien.id_user','=','users.id')
 					->join('dm_don_vi','hoc_vien.ma_don_vi','=','dm_don_vi.ma_don_vi')
 					->where([
@@ -211,7 +213,7 @@ class HocVienController extends Controller
 					->orderBy('ten','ASC')
 					->get();
 		$dsHocVienTrongKhoa = DB::table('users')
-					->select('*',\DB::raw("SUBSTRING_INDEX(users.hoten, ' ', -1) as ten"))
+					->select('*',DB::raw("SUBSTRING_INDEX(users.hoten, ' ', -1) as ten"))
 					->join('hoc_vien','hoc_vien.id_user','=','users.id')
 					->join('dm_don_vi','hoc_vien.ma_don_vi','=','dm_don_vi.ma_don_vi')
 					->where([

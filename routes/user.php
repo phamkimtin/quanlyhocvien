@@ -17,8 +17,10 @@ use App\Http\Controllers\TaiKhoanController;
 Route::get('/tai-khoan', function () {
     if(!session('login-state')) return redirect()->route('login');
     if(!in_array('view_tai_khoan',session('quyen'))) return redirect()->route('404');
-    Session::put('active-menu', 'menu-tai-khoan');
-    Session::put('parent-active-menu', 'menu-danh-muc');
+    session([
+        'active-menu' => 'menu-tai-khoan',
+        'parent-active-menu' => 'menu-danh-muc'
+    ]);
     return view('pages/modules/TaiKhoan/tai-khoan');
 })->name('tai-khoan');
 

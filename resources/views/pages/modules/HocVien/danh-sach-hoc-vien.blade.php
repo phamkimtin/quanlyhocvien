@@ -434,7 +434,6 @@ use App\Http\Controllers\KhoaHocController;
 				          'X-CSRF-Token': '{{ csrf_token() }}',
 				        },
 				        success: function(data){
-				          toastr.success("Load dữ liệu thành công.");
 				          $('#div-danh-sach-hoc-vien').html(data);
 				        }, 
 				        error: function(err){       

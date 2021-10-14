@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Session;
 use App\Models\XepMonHocModel;
 use App\Models\MonHocModel;
-use DB;
 
 class XepMonHocController extends Controller
 {
-	public function xepMonHoc(Request $request){	
+	public function xepMonHoc(Request $request){
 		if(!session('login-state')) return redirect()->route('login');
 		// if(!in_array('view_khoa_hoc',session('quyen'))) return redirect()->route('404');
 		$idKhoaHoc = $request->idKhoaHoc;

@@ -54,10 +54,10 @@
                 <p>Khóa học</p>
               </a>
             </li>
-            @endif    
-            @if(in_array('view_mon_hoc',session('quyen')))      
+            @endif
+            @if(in_array('view_mon_hoc',session('quyen')))
             <li class="nav-item">
-              <a href="{{route('mon-hoc')}}" class="nav-link">
+              <a href="{{route('mon-hoc')}}" class="nav-link" id='menu-mon-hoc'>
                 <i class="fas fa-book-open nav-icon"></i>
                 <p>Môn học</p>
               </a>

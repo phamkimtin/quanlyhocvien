@@ -18,21 +18,23 @@ class HomeController extends Controller
 		$user = TaiKhoanModel::getFromUsernamePass($username,$password);
 		if($user==false) return false;
 		if($user->state==0) return 'chua_duyet';
-		Session::put('login-state', true);
-		Session::put('username', $username);
-		Session::put('ho-ten', $user->hoten);
-		Session::put('nhom-quyen', $user->nhom_quyen);
+        session([
+            'login-state' => true,
+            'username' => $username,
+            'ho-ten' => $user->hoten,
+            'nhom-quyen' => $user->nhom_quyen
+        ]);
 		$dsQuyen = QuyenNhomQuyenModel::getQuyenByNhomQuyen($user->nhom_quyen);
 		$arrayQuyen = [];
 		foreach($dsQuyen as $quyen){
-			array_push($arrayQuyen,$quyen->ma_quyen); 
+			array_push($arrayQuyen,$quyen->ma_quyen);
 		}
-		Session::put('quyen', $arrayQuyen);
+        session(['quyen' => $arrayQuyen]);
 		return true;
 	}
 
 	public function checkLogout(Request $request){
-		Session::flush();
+		session()->flush();
 		return redirect()->route('login');
 	}
 

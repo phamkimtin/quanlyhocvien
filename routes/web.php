@@ -22,8 +22,8 @@ Route::get('/', function () {
 })->name('login');
 
 Route::get('/trang-chu', function () {
-    Session::forget('parent-active-menu');
-    Session::put('active-menu', 'menu-trang-chu');
+    session()->forget('parent-active-menu');
+    session(['active-menu' => 'menu-trang-chu']);
     return view('pages/home');
 })->name('trang-chu');
 

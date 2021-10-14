@@ -17,8 +17,10 @@ use App\Http\Controllers\DonViController;
 Route::get('/don-vi', function () {
     if(!session('login-state')) return redirect()->route('login');
     if(!in_array('view_don_vi',session('quyen'))) return redirect()->route('404');
-    Session::put('active-menu', 'menu-don-vi');
-    Session::put('parent-active-menu', 'menu-danh-muc');
+    session([
+        'active-menu' => 'menu-don-vi',
+        'parent-active-menu' => 'menu-danh-muc'
+    ]);
     return view('pages/modules/DonVi/don-vi');
 })->name('don-vi');
 

@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Session;
 use App\Models\KetQuaModel;
 use App\Models\XepMonHocModel;
 use App\Models\KhoaHocModel;
-use DB;
 
 class KetQuaController extends Controller
 {
@@ -22,7 +22,7 @@ class KetQuaController extends Controller
 						->where('khoa_hoc.id','=',$request->idKhoaHoc)
 						->get();
 		$dsHocVien = DB::table('hoc_vien')
-						->select('*',\DB::raw("SUBSTRING_INDEX(users.hoten, ' ', -1) as ten"))
+						->select('*',DB::raw("SUBSTRING_INDEX(users.hoten, ' ', -1) as ten"))
 						->join('khoa_hoc','hoc_vien.ma_khoa_hoc','=','khoa_hoc.ma_khoa_hoc')
 						->join('users','hoc_vien.id_user','=','users.id')
 						->join('dm_don_vi','hoc_vien.ma_don_vi','=','dm_don_vi.ma_don_vi')
@@ -90,7 +90,7 @@ class KetQuaController extends Controller
 						->where('khoa_hoc.id','=',$request->idKhoaHoc)
 						->get();
 		$dsHocVien = DB::table('hoc_vien')
-						->select('*',\DB::raw("SUBSTRING_INDEX(users.hoten, ' ', -1) as ten"))
+						->select('*',DB::raw("SUBSTRING_INDEX(users.hoten, ' ', -1) as ten"))
 						->join('khoa_hoc','hoc_vien.ma_khoa_hoc','=','khoa_hoc.ma_khoa_hoc')
 						->join('users','hoc_vien.id_user','=','users.id')
 						->join('dm_don_vi','hoc_vien.ma_don_vi','=','dm_don_vi.ma_don_vi')
@@ -105,7 +105,7 @@ class KetQuaController extends Controller
 						->orderBy('hoc_vien.ma_don_vi','ASC')
 						->orderBy('ten','ASC')
 						->get();
-		
+
 		return view('pages/modules/ChamDiem/danh-sach-hoc-vien', compact('dsMonHoc','dsHocVien','idKhoaHoc'));
 	}
 }
