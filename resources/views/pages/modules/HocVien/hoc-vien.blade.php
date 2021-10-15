@@ -14,10 +14,10 @@
 </div><!-- /.row -->
 @endsection
 @section('content')
-@php 
-use App\Http\Controllers\DanTocController; 
-use App\Http\Controllers\DonViController; 
-use App\Http\Controllers\KhoaHocController; 
+@php
+use App\Http\Controllers\DanTocController;
+use App\Http\Controllers\DonViController;
+use App\Http\Controllers\KhoaHocController;
 @endphp
 <div class="row">
   @php $dsNamHoc = KhoaHocController::getDsNamHoc(); @endphp
@@ -45,7 +45,7 @@ use App\Http\Controllers\KhoaHocController;
 <!-- Default box -->
 <div class="card">
   <div class="card-body" style="padding: 0px;" id="div-danh-sach-hoc-vien">
-    
+
   </div>
   <!-- /.card-body -->
 </div>
@@ -194,8 +194,8 @@ use App\Http\Controllers\KhoaHocController;
       success: function(data){
         toastr.success("Load dữ liệu thành công.");
         $('#div-danh-sach-hoc-vien').html(data);
-      }, 
-      error: function(err){       
+      },
+      error: function(err){
         toastr.error("Lỗi! Vui lòng thử lại.");
         console.log(err);
       }
@@ -256,15 +256,15 @@ use App\Http\Controllers\KhoaHocController;
               success: function(data){
                 $('#div-danh-sach-hoc-vien').empty();
                 $('#div-danh-sach-hoc-vien').html(data);
-              }, 
-              error: function(err){       
+              },
+              error: function(err){
                 toastr.error("Lỗi! Vui lòng thử lại.");
                 console.log(err);
               }
             });
           }
-        }, 
-        error: function(err){       
+        },
+        error: function(err){
           toastr.error("Lỗi! Vui lòng thử lại.");
           console.log(err);
         }
@@ -286,8 +286,8 @@ use App\Http\Controllers\KhoaHocController;
       },
       success: function(data){
         $('#chon-khoa-hoc').children().remove().end().append(data);
-      }, 
-      error: function(err){       
+      },
+      error: function(err){
         toastr.error("Lỗi! Vui lòng thử lại.");
         console.log(err);
       }
@@ -303,8 +303,8 @@ use App\Http\Controllers\KhoaHocController;
         success: function(data){
           toastr.success("Load dữ liệu thành công.");
           $('#div-danh-sach-hoc-vien').html(data);
-        }, 
-        error: function(err){       
+        },
+        error: function(err){
           toastr.error("Lỗi! Vui lòng thử lại.");
           console.log(err);
         }
@@ -323,8 +323,8 @@ use App\Http\Controllers\KhoaHocController;
         success: function(data){
           toastr.success("Load dữ liệu thành công.");
           $('#div-danh-sach-hoc-vien').html(data);
-        }, 
-        error: function(err){       
+        },
+        error: function(err){
           toastr.error("Lỗi! Vui lòng thử lại.");
           console.log(err);
         }
